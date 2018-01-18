@@ -7,5 +7,6 @@ import com.sansan.dao.User;
 public interface UserService {
 	String SERVICE_NAME = "userService";
 	List<User> getUserInfo(int i);
+	String getUserPassWord(String userName);
 
 }

@@ -8,14 +8,26 @@
 		<result property="passWord" jdbcType="VARCHAR" column="passWord" />
 	</resultMap>
 	
+	<resultMap id="userPassWord" type="java.lang.String">
+		<result property="passWord" jdbcType="VARCHAR" column="passWord" />
+	</resultMap>
 	<sql id="User_Info">
 		userID,
 		userName,
 		passWord
 	</sql>
+	
+	<sql id="User_Pass">
+		passWord
+	</sql>
 	<select id="getUserInfoByUserID" resultMap="getUserInfoByUserID" parameterType="java.lang.Integer">
 		SELECT
 		<include refid="User_Info" />
-		from mf_user WHERE userID = #{i}
+		From mf_user WHERE userID = #{i}
+	</select>
+	<select id="getUserPassWord" resultMap="userPassWord" parameterType="java.lang.String">
+		SELECT
+		<include refid="User_Pass" />
+		FROM mf_user WHERE userName = #{userName}
 	</select>
 </mapper>

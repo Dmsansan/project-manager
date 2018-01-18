@@ -17,18 +17,31 @@
    
       <!-- 开启注解模式驱动 --> 
        <mvc:annotation-driven></mvc:annotation-driven>
+       
       <!-- 扫包 -->
       <context:component-scan base-package="com.sansan.*"></context:component-scan>
+      
       <!-- 静态资源过滤 -->
-         <mvc:resources location="/resources/" mapping="/resources/**"/>
-    
-   
-         <!-- 视图渲染 jsp/freemaker/velocity-->
-         <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <!-- 制定页面存放的路径 -->
-            <property name="prefix" value="/WEB-INF/pages/"></property>
-            <!-- 文件的后缀 -->
-            <property name="suffix" value=".jsp"></property>
-         </bean> 
-    
+      <mvc:resources location="/resources/" mapping="/resources/**"/>
+      
+	  <!-- 视图渲染 jsp/freemaker/velocity-->
+      <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      
+      <!-- 制定页面存放的路径 -->
+      	<property name="prefix" value="/WEB-INF/pages/"></property>
+      	<!-- 文件的后缀 -->
+       	<property name="suffix" value=".jsp"></property>
+      </bean> 
+      
+      <!-- 配置拦截器 -->
+      <mvc:interceptors>
+          <mvc:interceptor>
+              <mvc:mapping path="/"/>
+              <bean class="com.sansan.Interceptor.SecurityInterceptor"/>
+          </mvc:interceptor>
+          <mvc:interceptor>
+              <mvc:mapping path="/admin/**"/>
+              <bean class="com.sansan.Interceptor.SecurityInterceptor"/>
+          </mvc:interceptor>
+      </mvc:interceptors>
 </beans>

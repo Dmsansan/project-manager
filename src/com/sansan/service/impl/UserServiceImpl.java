@@ -17,9 +17,19 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserMapper userMapper;
 	
+	/**
+	 * 测试SMM框架接口
+	 */
 	@Override
 	public List<User> getUserInfo(int i) {
 		return userMapper.getUserInfoByUserID(i);
+	}
+	/**
+	 * 根据用户名查找用户密码
+	 */
+	@Override
+	public String getUserPassWord(String userName) {
+		return userMapper.getUserPassWord(userName);
 	}
 	
 }
