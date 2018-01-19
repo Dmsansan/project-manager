@@ -1,7 +1,7 @@
 package com.sansan.service.impl;
 
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +31,21 @@ public class UserServiceImpl implements UserService{
 	public String getUserPassWord(String userName) {
 		return userMapper.getUserPassWord(userName);
 	}
+	/**
+	 * 查找用户ID
+	 */
+	@Override
+	public User getUserID(String userName) {
+		return userMapper.getUserID(userName);
+	}
+	
+	/**
+	 * 添加用户
+	 */
+	@Override
+	public int insertUser(Map<String, String> map) {
+		return userMapper.insertUser(map);
+	}
+	
 	
 }

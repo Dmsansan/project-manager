@@ -85,7 +85,7 @@
 								  title:'提示信息',
 								  time:1000,
 								  end: function () {
-									  window.location.href="index";
+									  window.location.href="user/index";
 						            }
 								})
 						}else{

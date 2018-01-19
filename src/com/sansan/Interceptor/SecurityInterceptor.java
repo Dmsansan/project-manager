@@ -5,15 +5,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 
 public class SecurityInterceptor implements HandlerInterceptor{
-	// 日志记录
-    private static final Logger log = Logger.getLogger(SecurityInterceptor.class);
-    
+	//日志记录
+	private static final Logger log = Logger.getLogger(SecurityInterceptor.class);
 	@Override
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
 			throws Exception {
@@ -27,19 +25,19 @@ public class SecurityInterceptor implements HandlerInterceptor{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/**
-	 * 拦截器
-	 */
+
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse arg1, Object arg2) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
+		System.out.println("拦截器开始..............");
 		HttpSession session = request.getSession();
-		String isAutoLogin = (String) session.getAttribute("isAutoLigin");
-		log.info("+++++++++++++拦截在自动登录信息+++++++++++++"+isAutoLogin);
-		if(isAutoLogin == null || isAutoLogin == "false"){
-			request.getRequestDispatcher("/login.jsp").forward(request,arg1);
-			return false;
+		String isAutoLogin  = (String) session.getAttribute("isAutoLogin");
+		log.info("+++++++++++++++++"+isAutoLogin+"++++++++++++++++++++++++");
+		if(isAutoLogin == null || isAutoLogin.equals("false")){
+			 request.getRequestDispatcher("login.jsp").forward(request,response);
+	         return false;
 		}
+		
 		return true;
-	}	
+	}
+		
 }

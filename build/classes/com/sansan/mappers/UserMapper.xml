@@ -11,6 +11,11 @@
 	<resultMap id="userPassWord" type="java.lang.String">
 		<result property="passWord" jdbcType="VARCHAR" column="passWord" />
 	</resultMap>
+	
+	<resultMap id="userID" type="java.lang.Integer">
+		<result property="userID" jdbcType="INTEGER" column="userID" />
+	</resultMap>
+	
 	<sql id="User_Info">
 		userID,
 		userName,
@@ -20,14 +25,34 @@
 	<sql id="User_Pass">
 		passWord
 	</sql>
+	
+	<sql id="userID">
+		userID
+	</sql>
+	
 	<select id="getUserInfoByUserID" resultMap="getUserInfoByUserID" parameterType="java.lang.Integer">
 		SELECT
 		<include refid="User_Info" />
 		From mf_user WHERE userID = #{i}
 	</select>
+	
 	<select id="getUserPassWord" resultMap="userPassWord" parameterType="java.lang.String">
 		SELECT
 		<include refid="User_Pass" />
 		FROM mf_user WHERE userName = #{userName}
 	</select>
+	
+	<select id="getUserID" resultMap="getUserInfoByUserID"   parameterType="java.lang.String">
+		SELECT
+		<include refid="User_Info" />
+		FROM mf_user WHERE userName = #{userName} ORDER BY logStamp DESC LIMIT 1
+	</select>
+	
+	<insert id="insertUser" parameterType="map">
+		<selectKey resultType="java.lang.Integer" keyProperty="userID" order="AFTER" >
+	       SELECT LAST_INSERT_ID() AS userID
+	    </selectKey>
+		INSERT INTO mf_user (userName,passWord,logStamp) VALUES (#{userName},#{passWord},#{logStamp})
+	</insert>
+	
 </mapper>

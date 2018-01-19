@@ -36,7 +36,7 @@
       <!-- 配置拦截器 -->
       <mvc:interceptors>
           <mvc:interceptor>
-              <mvc:mapping path="/"/>
+              <mvc:mapping path="/index/**"/>
               <bean class="com.sansan.Interceptor.SecurityInterceptor"/>
           </mvc:interceptor>
           <mvc:interceptor>

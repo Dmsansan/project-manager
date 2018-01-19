@@ -27,7 +27,7 @@
 	<div class="myapp-login-logo-block  tpl-login-max">
 		<div class="myapp-login-logo-text">
 			<div class="myapp-login-logo-text">
-				项目管理系统<span> 登录</span> <i class="am-icon-skyatlas"></i>
+				项目管理系统<span> 注册</span> <i class="am-icon-skyatlas"></i>
 				
 			</div>
 		</div>
@@ -36,18 +36,18 @@
 			<span><a href="${contextPath}" style="color:white">登录 </a></span> | <i> 注册</i>
 		</div>
 		<div class="am-u-sm-10 login-am-center">
-			<form class="am-form">
+			<form class="am-form" onsubmit="return false">
 				<fieldset>
 					<div class="am-form-group">
-						<input type="email" class="" id="username" name="username" placeholder="输入电子邮件" required />
+						<input type="email" class="" id="userName" name="username" placeholder="输入电子邮件" required />
 					</div>
 					<div class="am-form-group">
-						<input type="password" class="password" id="password" name="repassword" placeholder="设置个密码吧" required />
+						<input type="password" class="password" id="passWord" name="repassword" placeholder="设置个密码吧" required  minlength=6/>
 					</div>
 					<div class="am-form-group">
-						<input type="password" class="" id="repassword" name="repassword" placeholder="确认密码" required />
+						<input type="password" class="" id="repassWord" name="repassword" placeholder="确认密码" data-equal-to="#passWord" required minlength=6 />
 					</div>
-					<p><button type="submit" class="am-btn am-btn-default">注册</button></p>
+					<p><button type="submit" class="am-btn am-btn-default" id="register">注册</button></p>
 				</fieldset>
 			</form>
 		</div>
@@ -58,5 +58,63 @@
 <script src="${contextPath}/resources/js/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/amazeui.min.js"></script>
 <script src="${contextPath}/resources/js/app.js"></script>
+<script src="${contextPath}/resources/js/md5.min.js"></script>
+<script src="${contextPath}/resources/layer/layer.js"></script>
+<script>
+	$(function(){
+		$('#register').bind('click',function(){
+			var userName = $('#userName').val();
+			var passWord = $('#passWord').val();
+			var repassWord  = $('#repassWord').val();
+			var emailCode = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+			
+			if(emailCode.test(userName)&&passWord.length>=6&&repassWord.length>=6){
+				if(passWord==repassWord){
+					$.ajax({
+						url:'insertUser',
+						type:'post',
+						dataType:'json',
+						data:{'userName':userName,'passWord':md5(passWord)},
+						success:function(res){
+							if(res.code == 102){
+								layer.alert(res.msg, {
+									  icon: 1,
+									  skin: 'layer-ext-moon',
+									  title:'提示信息',
+									  time:1000,
+									  end: function () {
+										  window.location.href="${contextPath}/login.jsp";
+							            }
+									})
+							}else{
+								layer.alert(res.msg, {
+									  icon: 2,
+									  skin: 'layer-ext-moon',
+									  title:'提示信息',
+									  time:1000,
+									})
+							}
+						},
+						error:function(){
+							layer.alert(res.msg, {
+								  icon: 2,
+								  skin: 'layer-ext-moon',
+								  title:'提示信息',
+								  time:1000,
+								})
+						}
+					})
+				}else{
+					layer.alert('两次输入的密码不一致！', {
+						  icon: 2,
+						  skin: 'layer-ext-moon',
+						  title:'提示信息',
+						  time:1000,
+						})
+				}
+			}
+		})
+	})
+</script>
 </body>
 </html>
