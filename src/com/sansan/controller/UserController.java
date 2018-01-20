@@ -35,7 +35,7 @@ public class UserController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("index")
+	@RequestMapping("/index")
 	public ModelAndView index(HttpServletRequest request){
 		
 		String contextpath = request.getContextPath();
@@ -100,7 +100,7 @@ public class UserController {
 	 * @param request
 	 * @return 100：异常 101：退出成功
 	 */
-	@RequestMapping("logout")
+	@RequestMapping("/logout")
 	public @ResponseBody Object logout(HttpServletRequest request, Model model){
 		try{
 			request.getSession().removeAttribute("isAutoLogin");

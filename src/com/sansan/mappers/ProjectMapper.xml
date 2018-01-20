@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sansan.mappers.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.sansan.dao.Project">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="principalID" jdbcType="INTEGER" property="principalid" />
+    <result column="memberID" jdbcType="VARCHAR" property="memberid" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <resultMap id="ProjectListResultMap" type="com.sansan.dao.Project">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="principalID" jdbcType="INTEGER" property="principalid" />
+    <result column="memberID" jdbcType="VARCHAR" property="memberid" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="principalName" jdbcType="INTEGER" property="principalname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, title, description, principalID, memberID, startTime, endTime, status
+  </sql>
+  <sql id="Get_Project_List">
+  	 a.ID, a.title, a.description, a.principalID, a.memberID, a.startTime, a.endTime, a.status, b.userName as principalName
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mf_project
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getProjectList" resultMap="ProjectListResultMap">
+	select
+	<include refid="Get_Project_List" />
+	from mf_project as a left join mf_user as b on a.principalID=b.userID 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mf_project
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sansan.dao.Project">
+    insert into mf_project (ID, title, description, 
+      principalID, memberID, startTime, 
+      endTime, status)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{principalid,jdbcType=INTEGER}, #{memberid,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, 
+      #{endtime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sansan.dao.Project">
+    insert into mf_project
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="principalid != null">
+        principalID,
+      </if>
+      <if test="memberid != null">
+        memberID,
+      </if>
+      <if test="starttime != null">
+        startTime,
+      </if>
+      <if test="endtime != null">
+        endTime,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="principalid != null">
+        #{principalid,jdbcType=INTEGER},
+      </if>
+      <if test="memberid != null">
+        #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sansan.dao.Project">
+    update mf_project
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="principalid != null">
+        principalID = #{principalid,jdbcType=INTEGER},
+      </if>
+      <if test="memberid != null">
+        memberID = #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null">
+        startTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null">
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sansan.dao.Project">
+    update mf_project
+    set title = #{title,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      principalID = #{principalid,jdbcType=INTEGER},
+      memberID = #{memberid,jdbcType=VARCHAR},
+      startTime = #{starttime,jdbcType=TIMESTAMP},
+      endTime = #{endtime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
