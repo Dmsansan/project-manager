@@ -1,6 +1,7 @@
 package com.sansan.mappers;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sansan.dao.Project;
 
@@ -16,7 +17,16 @@ public interface ProjectMapper {
     int updateByPrimaryKeySelective(Project record);
 
     int updateByPrimaryKey(Project record);
-
-	@SuppressWarnings("rawtypes")
-	List getProjectList();
+    
+    /**
+     * 获取项目list
+     * @param map
+     * @return
+     */
+    List<Project> getProjectList(Map<String, Integer> map);
+    /**
+     * 获取项目总的记录条数
+     * @return
+     */
+	int getProjectNumbers();
 }

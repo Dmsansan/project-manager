@@ -6,6 +6,13 @@
 		<result property="userID" jdbcType="INTEGER" column="userID" />
 		<result property="userName" jdbcType="VARCHAR" column="userName" />
 		<result property="passWord" jdbcType="VARCHAR" column="passWord" />
+		<result property="name" jdbcType="VARCHAR" column="name" />
+		<result property="sex" jdbcType="INTEGER" column="sex" />
+		<result property="age" jdbcType="INTEGER" column="age" />
+		<result property="phone" jdbcType="VARCHAR" column="phone" />
+		<result property="address" jdbcType="VARCHAR" column="address" />
+		<result property="positionID" jdbcType="INTEGER" column="positionID" />
+		<result property="logStamp" jdbcType="VARCHAR" column="logStamp" />
 	</resultMap>
 	
 	<resultMap id="userPassWord" type="java.lang.String">
@@ -16,10 +23,22 @@
 		<result property="userID" jdbcType="INTEGER" column="userID" />
 	</resultMap>
 	
+	<resultMap id="getAllUser" type="com.sansan.dao.User">
+		<result property="userID" jdbcType="INTEGER" column="userID" />
+		<result property="name" jdbcType="VARCHAR" column="name" />
+	</resultMap>
+	
 	<sql id="User_Info">
 		userID,
 		userName,
-		passWord
+		passWord,
+		name,
+		sex,
+		age,
+		phone,
+		address,
+		positionID,
+		logStamp
 	</sql>
 	
 	<sql id="User_Pass">
@@ -28,6 +47,11 @@
 	
 	<sql id="userID">
 		userID
+	</sql>
+	
+	<sql id="getAllUser">
+		userID,
+		name
 	</sql>
 	
 	<select id="getUserInfoByUserID" resultMap="getUserInfoByUserID" parameterType="java.lang.Integer">
@@ -40,6 +64,12 @@
 		SELECT
 		<include refid="User_Pass" />
 		FROM mf_user WHERE userName = #{userName}
+	</select>
+	
+	<select id="getAllUser" resultMap="getAllUser">
+		SELECT
+		<include refid="getAllUser" />
+		FROM mf_user 
 	</select>
 	
 	<select id="getUserID" resultMap="getUserInfoByUserID"   parameterType="java.lang.String">

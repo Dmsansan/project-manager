@@ -1,11 +1,13 @@
 package com.sansan.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sansan.dao.Project;
 import com.sansan.mappers.ProjectMapper;
 import com.sansan.service.ProjectService;
 @Transactional
@@ -13,11 +15,21 @@ import com.sansan.service.ProjectService;
 public class ProjectServiceImpl implements ProjectService{
 	@Autowired
 	private ProjectMapper projectMgr;
-
-	@SuppressWarnings("rawtypes")
+	
+	/**
+	 * 分页查询项目记录条数
+	 */
 	@Override
-	public List getProjectList() {
-		return projectMgr.getProjectList();
+	public List<Project> getProjectList(Map<String, Integer> map) {
+		return projectMgr.getProjectList(map);
+	}
+	
+	/**
+	 * 获取项目记录总的条数
+	 */
+	@Override
+	public int getProjectNumbers() {
+		return projectMgr.getProjectNumbers();
 	}
 
 }

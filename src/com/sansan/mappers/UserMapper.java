@@ -29,5 +29,11 @@ public interface UserMapper {
 	 * @return
 	 */
 	int insertUser(Map<String, String> map);
+	
+	/**
+	 * 获取select框用户
+	 * @return
+	 */
+	List<User> getAllUser();
 
 }

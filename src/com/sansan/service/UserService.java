@@ -29,5 +29,11 @@ public interface UserService {
 	 * @return
 	 */
 	int insertUser(Map<String, String> map);
+	
+	/**
+	 * select框用户获取
+	 * @return
+	 */
+	List<User> getAllUser();
 
 }

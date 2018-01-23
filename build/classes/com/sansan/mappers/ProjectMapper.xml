@@ -20,13 +20,17 @@
     <result column="startTime" jdbcType="TIMESTAMP" property="starttime" />
     <result column="endTime" jdbcType="TIMESTAMP" property="endtime" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="principalName" jdbcType="INTEGER" property="principalname" />
+    <result column="principalName" jdbcType="VARCHAR" property="principalname" />
+     <result column="page" jdbcType="INTEGER" property="page" />
+  </resultMap>
+  <resultMap id="ProjectTotalMap" type="java.lang.Integer">
+  	<result column="total" jdbcType="INTEGER" property="total" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, title, description, principalID, memberID, startTime, endTime, status
   </sql>
   <sql id="Get_Project_List">
-  	 a.ID, a.title, a.description, a.principalID, a.memberID, a.startTime, a.endTime, a.status, b.userName as principalName
+  	 a.ID, a.title, a.description, a.principalID, a.memberID, a.startTime, a.endTime, a.status, b.name as principalName
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -34,10 +38,10 @@
     from mf_project
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <select id="getProjectList" resultMap="ProjectListResultMap">
+  <select id="getProjectList" resultMap="ProjectListResultMap" parameterType="map">
 	select
 	<include refid="Get_Project_List" />
-	from mf_project as a left join mf_user as b on a.principalID=b.userID 
+	from mf_project as a left join mf_user as b on a.principalID=b.userID LIMIT #{start},#{end} 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mf_project
@@ -144,4 +148,8 @@
       status = #{status,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 获取项目记录条数 -->
+  <select id="getProjectNumbers" resultMap="ProjectTotalMap" parameterType="java.lang.Integer">
+  	select count(*) as total from mf_project
+  </select>
 </mapper>

@@ -529,6 +529,7 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
     top: 2px;
     margin-left: 1px;
     margin-right: 6px;
+    margin-top:-8px;
     color: #a7bdcd;
 }
 

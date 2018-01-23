@@ -20,7 +20,13 @@ public class Project {
     private Integer status;
     
     private String 	principalname;
-
+    
+    private String membername;
+    
+    private Integer total;
+    
+    private Integer page;
+    
     public Integer getId() {
         return id;
     }
@@ -92,5 +98,29 @@ public class Project {
 
 	public void setPrincipalname(String principalname) {
 		this.principalname = principalname;
+	}
+
+	public String getMembername() {
+		return membername;
+	}
+
+	public void setMembername(String membername) {
+		this.membername = membername;
+	}
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
 	}
 }

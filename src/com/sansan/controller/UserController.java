@@ -4,6 +4,7 @@ package com.sansan.controller;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -128,7 +129,7 @@ public class UserController {
 		 model.put("contextPath",contextpath);
 		 return new ModelAndView("System/register",model);
 	}
-	@RequestMapping("insertUser")
+	@RequestMapping("/insertUser")
 	public @ResponseBody Object insertUser(HttpServletRequest request, Model model){
 		try{
 			String userName = request.getParameter("userName");
@@ -168,6 +169,26 @@ public class UserController {
 		return model;
 	}
 	
+	/**
+	 * 获取用户列表select框
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/getAllUser")
+	public @ResponseBody Object getAllUser(HttpServletRequest request, Model model){
+		try{
+			List<User> list = userService.getAllUser();
+			
+			model.addAttribute("code", 101);
+			model.addAttribute("data", list);
+		}catch(Exception e){
+			log.info(e);
+			model.addAttribute("code", 100);
+			model.addAttribute("msg", "异常！");
+		}
+		return model;
+	}
 	/**
 	 * 判断输入参数是否为空
 	 * @param userName

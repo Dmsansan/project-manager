@@ -47,5 +47,13 @@ public class UserServiceImpl implements UserService{
 		return userMapper.insertUser(map);
 	}
 	
+	/**
+	 * select 框用户获取
+	 */
+	@Override
+	public List<User> getAllUser() {
+		return userMapper.getAllUser();
+	}
+	
 	
 }

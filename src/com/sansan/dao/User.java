@@ -4,7 +4,13 @@ public class User {
 	private Integer userID;
 	private String userName;
 	private String passWord;
-	
+	private String name;
+	private Integer sex;
+	private Integer age;
+	private String phone;
+	private String address;
+	private Integer positionID;
+	private String logStamp;
 	public User(){
 		
 	}
@@ -28,9 +34,59 @@ public class User {
 		this.passWord = passWord;
 	}
 	
-	@Override
-	public String toString() {
-		return "User [userID=" + userID + ", userName=" + userName + ", passWord=" + passWord
-				+ "]";
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Integer getPositionID() {
+		return positionID;
+	}
+
+	public void setPositionID(Integer positionID) {
+		this.positionID = positionID;
+	}
+
+	public String getLogStamp() {
+		return logStamp;
+	}
+
+	public void setLogStamp(String logStamp) {
+		this.logStamp = logStamp;
 	}
 }
