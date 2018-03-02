@@ -62,27 +62,27 @@
                                 <div class="am-form-group">
                                     <label for="user-QQ" class="am-u-sm-3 am-form-label">项目开始时间</label>
                                     <div class="am-u-sm-9">
-                                       <input type="text" class="am-form-field" placeholder="项目开始时间" data-am-datepicker  required />
+                                       <input type="text" class="am-form-field" placeholder="项目开始时间" id="startTime" data-am-datepicker  required />
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
                                     <label for="user-weibo" class="am-u-sm-3 am-form-label">项目结束时间</label>
                                     <div class="am-u-sm-9">
-                                        <input type="text" class="am-form-field" placeholder="项目结束时间" data-am-datepicker required />
+                                        <input type="text" class="am-form-field" placeholder="项目结束时间" id="endTime" data-am-datepicker required />
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
                                     <label for="user-intro" class="am-u-sm-3 am-form-label">项目简介</label>
                                     <div class="am-u-sm-9">
-                                        <textarea class="" rows="5" id="user-intro" placeholder="输入项目简介" required ></textarea>
+                                        <textarea class="" rows="5"  placeholder="输入项目简介" id="description" required ></textarea>
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
                                     <div class="am-u-sm-9 am-u-sm-push-3">
-                                        <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+                                        <button type="submit" class="am-btn am-btn-primary" id="saveData">保存修改</button>
                                     </div>
                                 </div>
                             </form>
@@ -98,8 +98,8 @@
 <script src="${contextPath}/resources/layer/layer.js"></script>
  	<script>
  	$(function(){
+ 		//加载成员信息
  		$.post("${contextPath}/user/getAllUser","",function(res){
- 			console.log(res.data);
  			var data=res.data;
  			if(data){
  				for(var i=0;i<data.length;i++){
@@ -110,6 +110,21 @@
  				}
  			}
  		},"json");
+ 		
+ 		//新增项目按钮绑定
+ 		$('#saveData').bind('click',function(){
+ 			var title = $('#title').val();
+ 			var principalID = $('#principalID').val();
+ 			var memberID = $('#memberID').val();
+ 			var startTime = $('#startTime').val();
+ 			var endTime = $('#endTime').val();
+ 			var description = $('#description').val();
+ 			if(title!='' && principalID!='' && memberID!='' && startTime!='' && endTime!='' && description!=''){
+ 				$.post("${contextPath}/project/insertProject",{'title':title},function(res){
+ 					alert(res.msg);
+ 				},"json");
+ 			}
+ 		})
  	})
  	</script>
 </body>

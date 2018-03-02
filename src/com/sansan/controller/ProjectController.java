@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,44 @@ public class ProjectController {
 		
 		return new ModelAndView("Project/addAndUpdate",model);
 	}
+	@RequestMapping("/insertProject")
+	public @ResponseBody Object insertProject(HttpServletRequest request, Model model){
+		try{
+			String title = request.getParameter("title");//项目名称
+			System.out.print(title+'\n');
+//			Integer principalID = 0;
+//			if(!StringUtils.isNotEmpty(request.getParameter("principalID"))){
+//				principalID = Integer.parseInt(request.getParameter("principalID"));//负责人ID
+//			}
+			String memberID = request.getParameter("memberID");//项目组成员ID
+			String startTime = request.getParameter("startTime");//项目开始时间
+			String endTime = request.getParameter("endTime");//项目结束时间
+			String description = request.getParameter("description");//项目描述
+			Integer status = 0;
+			if(!StringUtils.isNotEmpty(title)){
+				model.addAttribute("code", 100);
+				model.addAttribute("msg", "缺少必填参数！");
+				return model;
+			}else{
+				Map<String,Object> map = new HashMap<String,Object>();
+				map.put("title", title);
+				
+				//map.put("principalID", principalID);
+				map.put("memberID", memberID);
+				map.put("startTime", startTime);
+				map.put("endTime", endTime);
+				map.put("description", description);
+				map.put("status", status);
+				model.addAttribute("msg",title);
+				return model;
+			}
+		}catch(Exception e){
+			model.addAttribute("code", 101);
+			model.addAttribute("msg", "服务器异常！");
+			return model;
+		}
+		
+	}
 	/**
 	 * 获取项目列表数据
 	 * @param req
@@ -72,7 +111,7 @@ public class ProjectController {
 	public @ResponseBody Object projectList(HttpServletRequest request, Model model){
 		try{
 			Integer page = request.getParameter("page")==null? 1:Integer.parseInt(request.getParameter("page"));//当前页
-			Integer pageNum = request.getParameter("pageNum")==null ? 1:Integer.parseInt(request.getParameter("pageNum"));//每页数量
+			Integer pageNum = request.getParameter("pageNum")==null ? 10:Integer.parseInt(request.getParameter("pageNum"));//每页数量
 			Integer start = pageNum*(page-1);
 			Integer end = pageNum*page;
 			
@@ -93,7 +132,7 @@ public class ProjectController {
 				System.out.print(proList.getMemberid());
 				memberID = proList.getMemberid();
 				//字符串分割为数组函数split
-	            arr = memberID.split(";");
+	            arr = memberID.split(",");
 				for(int i=0;i<arr.length;i++){
 				//获取用户姓名
 				List<User>  user = userServ.getUserInfo(Integer.parseInt(arr[i]));

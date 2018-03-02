@@ -282,7 +282,7 @@
     <script src="${contextPath}/resources/layer/layer.js"></script>
   
     <script>
-    var pageNum = 1;//默认每页显示的数量10条
+    var pageNum = 10;//默认每页显示的数量10条
     var page;//当前页
     //时间转换为年月日
     function timeToDate(time){
@@ -373,7 +373,13 @@
 			//项目进度
 			var now = new Date().getTime();
 			//alert((data[i].endtime-data[i].starttime)/86400000);
-			var process= Math.ceil(((now-data[i].starttime)/(data[i].endtime-data[i].starttime))*100);
+			var process = 0;
+			if(Math.ceil(((now-data[i].starttime)/(data[i].endtime-data[i].starttime))*100)>=100){
+				process = 100;
+			}else{
+				process = Math.ceil(((now-data[i].starttime)/(data[i].endtime-data[i].starttime))*100);
+			}
+			
 			document.getElementById("projectList").innerHTML += '<tr>'+
             '<td>'+data[i].id+'</td>'+
             '<td><a href="#">'+data[i].title+'</a></td>'+
