@@ -29,4 +29,11 @@ public interface ProjectMapper {
      * @return
      */
 	int getProjectNumbers();
+	
+	/**
+	 * 根据项目名称查找项目
+	 * @param title
+	 * @return
+	 */
+	Project getProjectByTitle(String title);
 }

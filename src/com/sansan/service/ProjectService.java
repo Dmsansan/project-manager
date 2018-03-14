@@ -11,6 +11,10 @@ public interface ProjectService {
 	List<Project> getProjectList(Map<String, Integer> map);
 
 	int getProjectNumbers();
+	
+	int insertProject(Project project);
+
+	Project getProjectByTitle(String title);
 
 
 }

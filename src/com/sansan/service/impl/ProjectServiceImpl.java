@@ -31,5 +31,21 @@ public class ProjectServiceImpl implements ProjectService{
 	public int getProjectNumbers() {
 		return projectMgr.getProjectNumbers();
 	}
+	
+	/**
+	 * 新增项目
+	 */
+	@Override
+	public int insertProject(Project project) {
+		return projectMgr.insert(project);
+	}
+	
+	/**
+	 * 根据项目名称查找项目
+	 */
+	@Override
+	public Project getProjectByTitle(String title) {
+		return projectMgr.getProjectByTitle(title);
+	}
 
 }

@@ -112,16 +112,30 @@
  		},"json");
  		
  		//新增项目按钮绑定
- 		$('#saveData').bind('click',function(){
+ 		$('#saveData').bind('click',function(){	
  			var title = $('#title').val();
  			var principalID = $('#principalID').val();
- 			var memberID = $('#memberID').val();
+ 			
+ 			var member = document.getElementById("memberID");
+ 			var memberID = "";
+ 		    for(i=0;i<member.length;i++){
+ 		        if(member.options[i].selected){
+ 		            memberID+=member[i].value+',';
+ 		        }
+ 		    }
+
  			var startTime = $('#startTime').val();
  			var endTime = $('#endTime').val();
  			var description = $('#description').val();
  			if(title!='' && principalID!='' && memberID!='' && startTime!='' && endTime!='' && description!=''){
- 				$.post("${contextPath}/project/insertProject",{'title':title},function(res){
- 					alert(res.msg);
+ 				$.post("${contextPath}/project/insertProject",{'title':title,'principalID':principalID,'memberID':memberID,'startTime':startTime,'endTime':endTime,'description':description},function(res){
+ 					console.log(res.msg);
+ 					layer.alert(res.msg,{
+						icon:2,
+						skin: 'layer-ext-moon',
+						title:'提示信息',
+						time:2000
+					})
  				},"json");
  			}
  		})

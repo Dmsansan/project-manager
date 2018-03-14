@@ -152,4 +152,12 @@
   <select id="getProjectNumbers" resultMap="ProjectTotalMap" parameterType="java.lang.Integer">
   	select count(*) as total from mf_project
   </select>
+  
+  <!-- 根据项目名称查找项目 -->
+  <select id="getProjectByTitle" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 
+    <include refid="Base_Column_List" />
+    from mf_project
+    where title = #{title,jdbcType=VARCHAR}
+  </select>
 </mapper>

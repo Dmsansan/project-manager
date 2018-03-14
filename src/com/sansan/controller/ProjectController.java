@@ -1,5 +1,8 @@
 package com.sansan.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +54,7 @@ public class ProjectController {
 	
 	/**
 	 * 项目添加编辑页面跳转
-	 * @param request
+	 * @param 
 	 * @return
 	 */
 	@RequestMapping("/addAndUpdateView")
@@ -63,38 +66,59 @@ public class ProjectController {
 		
 		return new ModelAndView("Project/addAndUpdate",model);
 	}
+	
+	/**
+	 * 项目添加接口
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/insertProject")
 	public @ResponseBody Object insertProject(HttpServletRequest request, Model model){
 		try{
+			DateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+			Date currentTime = new Date();
+			
 			String title = request.getParameter("title");//项目名称
-			System.out.print(title+'\n');
-//			Integer principalID = 0;
-//			if(!StringUtils.isNotEmpty(request.getParameter("principalID"))){
-//				principalID = Integer.parseInt(request.getParameter("principalID"));//负责人ID
-//			}
+			Integer principalID = 0;
+			if(StringUtils.isNotEmpty(request.getParameter("principalID"))){
+				principalID = Integer.parseInt(request.getParameter("principalID"));//负责人ID
+			}
 			String memberID = request.getParameter("memberID");//项目组成员ID
-			String startTime = request.getParameter("startTime");//项目开始时间
-			String endTime = request.getParameter("endTime");//项目结束时间
+			
+			Date startTime = StringUtils.isEmpty(request.getParameter("startTime"))?currentTime:format.parse(request.getParameter("startTime"));//项目开始时间
+			Date endTime = StringUtils.isEmpty(request.getParameter("endTime"))?currentTime:format.parse(request.getParameter("endTime"));//项目结束时间
+			
 			String description = request.getParameter("description");//项目描述
 			Integer status = 0;
-			if(!StringUtils.isNotEmpty(title)){
+			
+			if(StringUtils.isEmpty(title)||principalID==0||StringUtils.isEmpty(memberID)||StringUtils.isEmpty(description)){
 				model.addAttribute("code", 100);
 				model.addAttribute("msg", "缺少必填参数！");
 				return model;
 			}else{
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("title", title);
+				Project project = new Project();
+				project.setTitle(title);
+				project.setPrincipalid(principalID);
+				project.setMemberid(memberID);
+				project.setStarttime(startTime);
+				project.setEndtime(endTime);
+				project.setDescription(description);
+				project.setStatus(status);
 				
-				//map.put("principalID", principalID);
-				map.put("memberID", memberID);
-				map.put("startTime", startTime);
-				map.put("endTime", endTime);
-				map.put("description", description);
-				map.put("status", status);
-				model.addAttribute("msg",title);
+				Project projectTwo = projectServ.getProjectByTitle(title);
+				if(projectTwo!=null){
+					model.addAttribute("code", 102);
+					model.addAttribute("msg", "项目已存在，请勿重复添加！");
+				}else{
+					projectServ.insertProject(project);
+					model.addAttribute("code", 103);
+					model.addAttribute("msg","项目添加成功！");
+				}
 				return model;
 			}
 		}catch(Exception e){
+			log.info(e);
 			model.addAttribute("code", 101);
 			model.addAttribute("msg", "服务器异常！");
 			return model;
