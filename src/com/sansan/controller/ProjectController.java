@@ -107,7 +107,7 @@ public class ProjectController {
 				project.setStatus(status);
 				
 				Project projectTwo = projectServ.getProjectByTitle(title);
-				if(projectTwo!=null){
+				if(projectTwo != null){
 					model.addAttribute("code", 102);
 					model.addAttribute("msg", "项目已存在，请勿重复添加！");
 				}else{
@@ -137,7 +137,8 @@ public class ProjectController {
 			Integer page = request.getParameter("page")==null? 1:Integer.parseInt(request.getParameter("page"));//当前页
 			Integer pageNum = request.getParameter("pageNum")==null ? 10:Integer.parseInt(request.getParameter("pageNum"));//每页数量
 			Integer start = pageNum*(page-1);
-			Integer end = pageNum*page;
+			
+			Integer end = pageNum;//获取记录条数
 			
 			Map<String,Integer> map = new HashMap<String,Integer>();
 			map.put("start",start);
@@ -185,4 +186,18 @@ public class ProjectController {
 		}
 		return model;
 	}
+	
+	/**
+	 * 获取项目总数接口
+	 * @param req
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/getCountProject")
+	public @ResponseBody Object getCountProject(HttpServletRequest req, Model model){
+		int projectCount = projectServ.getProjectNumbers();
+		model.addAttribute("count", projectCount);
+		return model;
+	}
+	
 }

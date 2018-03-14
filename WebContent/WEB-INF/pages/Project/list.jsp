@@ -169,7 +169,7 @@
                     <li class="tpl-left-nav-item">
                         <a href="#" class="nav-link  active">
                             <i class="am-icon-bar-chart"></i>
-                            <span>项目管理</span>  <i class="tpl-left-nav-content tpl-badge-danger"> 12 </i>
+                            <span>项目管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="projectCount">  </i>
                         </a>
                     </li>
 
@@ -304,10 +304,26 @@
             shade: 0.3,
             maxmin: true, //开启最大化最小化按钮
             area: ['893px', '600px'],
-            content: '${contextPath}/project/addAndUpdateView'
+            content: '${contextPath}/project/addAndUpdateView',
+            end: function () {
+                location.reload();
+            }
           });
     }
+  //获取项目数量
+    function getProjectCount(){
+    	$.ajax({
+    		url:'${contextPath}/project/getCountProject',
+    		type:'get',
+    		dataType:'json',
+    		success:function(data){
+    			$('#projectCount').text(data.count);	
+    		}
+    	})
+    }
     $(document).ready(function(){
+    	getProjectCount();
+    	
     	$.ajax({
     		url:"list",
     		type:"post",

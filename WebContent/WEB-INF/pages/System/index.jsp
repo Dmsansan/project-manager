@@ -168,13 +168,14 @@
                             <span>首页</span>
                         </a>
                     </li>
+                    
                     <li class="tpl-left-nav-item">
                         <a href="${contextPath}/project/view" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-bar-chart"></i>
-                            <span>项目管理</span>  <i class="tpl-left-nav-content tpl-badge-danger"> 12 </i>
+                            <span>项目管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="projectCount">  </i>
                         </a>
                     </li>
-
+						
                     <li class="tpl-left-nav-item">
                         <a href="${contextPath}/login.jsp" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-key"></i>
@@ -990,6 +991,21 @@ function logout(){
 		  
 		});
 }
+//获取项目数量
+function getProjectCount(){
+	$.ajax({
+		url:'${contextPath}/project/getCountProject',
+		type:'get',
+		dataType:'json',
+		success:function(data){
+			$('#projectCount').text(data.count);	
+		}
+	})
+}
+
+$(function(){
+	getProjectCount();
+});
 </script>
 </body>
 </html>

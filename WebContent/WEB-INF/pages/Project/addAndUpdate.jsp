@@ -33,14 +33,13 @@
 
 
                         <div class="am-u-sm-12 am-u-md-9">
-                            <form class="am-form am-form-horizontal">
+                            <form class="am-form am-form-horizontal" onsubmit="return false">
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">项目名称</label>
                                     <div class="am-u-sm-9">
                                         <input type="text" id="title" placeholder="项目名称" required />
                                     </div>
                                 </div>
-
                                 <div class="am-form-group">
                                     <label for="user-email" class="am-u-sm-3 am-form-label">项目负责人</label>
                                     <div class="am-u-sm-9">
@@ -128,15 +127,31 @@
  			var endTime = $('#endTime').val();
  			var description = $('#description').val();
  			if(title!='' && principalID!='' && memberID!='' && startTime!='' && endTime!='' && description!=''){
- 				$.post("${contextPath}/project/insertProject",{'title':title,'principalID':principalID,'memberID':memberID,'startTime':startTime,'endTime':endTime,'description':description},function(res){
- 					console.log(res.msg);
- 					layer.alert(res.msg,{
-						icon:2,
-						skin: 'layer-ext-moon',
-						title:'提示信息',
-						time:2000
-					})
- 				},"json");
+ 				$.ajax({
+ 					url:'${contextPath}/project/insertProject',
+ 					type:'post',
+ 					dataType:'json',
+ 					data:{'title':title,'principalID':principalID,'memberID':memberID,'startTime':startTime,'endTime':endTime,'description':description},
+	 				success:function(res){
+	 					if(res.code=="103"){
+	 						layer.alert(res.msg, {
+								  icon: 1,
+								  skin: 'layer-ext-moon',
+								  title:'提示信息',
+								  time:1000,
+								})
+							
+	 					}else{
+	 						layer.alert(res.msg, {
+								  icon: 2,
+								  skin: 'layer-ext-moon',
+								  title:'提示信息',
+								  time:1000,
+								})
+	 					}
+	 				}
+ 				})
+
  			}
  		})
  	})
