@@ -38,6 +38,7 @@
                                     <label for="user-name" class="am-u-sm-3 am-form-label">项目名称</label>
                                     <div class="am-u-sm-9">
                                         <input type="text" id="title" placeholder="项目名称" required />
+                                        <input type="hidden" id="id" />
                                     </div>
                                 </div>
                                 <div class="am-form-group">
@@ -110,8 +111,26 @@
  			}
  		},"json");
  		
+ 		//初始化项目信息
+ 		$.post("${contextPath}/project/getProjectInfoById/?id=${id}","",function(res){
+ 			console.log(res.data);
+ 			var data = res.data;
+ 			if(data){
+	 			$('#id').val(data.id);
+	 			$('#title').val(data.title);
+	
+	 			$('#principalID').val(data.principalid);
+	 			$('#memberID').val(data.memberid);
+	 			
+	 			$('#startTime').datepicker('setValue',data.starttime);
+	 			$('#endTime').datepicker('setValue', data.endtime);
+	 			$('#description').val(data.description);
+ 			}
+ 		});
  		//新增项目按钮绑定
- 		$('#saveData').bind('click',function(){	
+ 		$('#saveData').bind('click',function(){
+ 			var id = $('#id').val();
+ 			
  			var title = $('#title').val();
  			var principalID = $('#principalID').val();
  			
@@ -126,12 +145,13 @@
  			var startTime = $('#startTime').val();
  			var endTime = $('#endTime').val();
  			var description = $('#description').val();
+ 			
  			if(title!='' && principalID!='' && memberID!='' && startTime!='' && endTime!='' && description!=''){
  				$.ajax({
  					url:'${contextPath}/project/insertProject',
  					type:'post',
  					dataType:'json',
- 					data:{'title':title,'principalID':principalID,'memberID':memberID,'startTime':startTime,'endTime':endTime,'description':description},
+ 					data:{'id':id,'title':title,'principalID':principalID,'memberID':memberID,'startTime':startTime,'endTime':endTime,'description':description},
 	 				success:function(res){
 	 					if(res.code=="103"){
 	 						layer.alert(res.msg, {
@@ -140,7 +160,13 @@
 								  title:'提示信息',
 								  time:1000,
 								})
-							
+	 					}else if (res.code=="104"){
+	 						layer.alert(res.msg, {
+								  icon: 1,
+								  skin: 'layer-ext-moon',
+								  title:'提示信息',
+								  time:1000,
+								})
 	 					}else{
 	 						layer.alert(res.msg, {
 								  icon: 2,

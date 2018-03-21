@@ -207,9 +207,9 @@
                             <div class="am-btn-toolbar">
                                 <div class="am-btn-group am-btn-group-xs">
                                     <button type="button" class="am-btn am-btn-default am-btn-success" onclick="add()"><span class="am-icon-plus"></span> 新增</button>
-                                    <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
+                                    <!-- <button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>
                                     <button type="button" class="am-btn am-btn-default am-btn-warning"><span class="am-icon-archive"></span> 审核</button>
-                                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button>
+                                    <button type="button" class="am-btn am-btn-default am-btn-danger"><span class="am-icon-trash-o"></span> 删除</button> -->
                                 </div>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                     </div>
                     <div class="am-g">
                         <div class="am-u-sm-12">
-                            <form class="am-form">
+                            <form class="am-form" onSubmit="return false">
                                 <table class="am-table am-table-striped am-table-hover table-main" id="project">
                                     <thead>
                                         <tr>
@@ -304,7 +304,7 @@
             shade: 0.3,
             maxmin: true, //开启最大化最小化按钮
             area: ['893px', '600px'],
-            content: '${contextPath}/project/addAndUpdateView',
+            content: '${contextPath}/project/addAndUpdateView/?id=0',
             end: function () {
                 location.reload();
             }
@@ -408,15 +408,46 @@
             '<td>'+
                 '<div class="am-btn-toolbar">'+
                     '<div class="am-btn-group am-btn-group-xs">'+
-                        '<button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>'+
-                        '<button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>'+
-                        '<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>'+
+                        '<button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="update('+data[i].id+')"><span class="am-icon-pencil-square-o"></span> 编辑</button>'+
+                        '<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del('+data[i].id+')"><span class="am-icon-trash-o"></span> 删除</button>'+
                     '</div>'+
                 '</div>'+
            ' </td>'+
         '</tr>';
 		}
     }
+   
+   //弹出编辑页面
+   function update(id){
+	   layer.open({
+           type: 2,
+           title: '',
+           shadeClose: true,
+           shade: 0.3,
+           maxmin: true, //开启最大化最小化按钮
+           area: ['893px', '600px'],
+           content: '${contextPath}/project/addAndUpdateView/?id='+id,
+           end: function () {
+               location.reload();
+           }
+         });
+   }
+   
+   //删除项目
+   function del(id){
+	   layer.confirm('确认删除该项目？', {
+		   btn: ['确认','取消'] 
+		 }, function(){
+			$.post("${contextPath}/project/delProject/?id="+id,"",function(res){
+				if(res.code==100){
+					layer.msg(res.msg, {icon: 1});
+				}else{
+					layer.msg(res.msg,{icon: 2});
+				}
+			})
+		 }, function(){
+		 });
+   }
     </script>
 </body>
 

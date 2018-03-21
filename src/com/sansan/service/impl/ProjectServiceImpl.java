@@ -47,5 +47,29 @@ public class ProjectServiceImpl implements ProjectService{
 	public Project getProjectByTitle(String title) {
 		return projectMgr.getProjectByTitle(title);
 	}
+	
+	/**
+	 * 根据项目ID查找项目
+	 */
+	@Override
+	public Project getProjectById(String id) {
+		return projectMgr.selectByPrimaryKey(Integer.valueOf(id));
+	}
+	
+	/**
+	 * 编辑项目
+	 */
+	@Override
+	public int updateProject(Project project) {
+		return projectMgr.updateByPrimaryKeySelective(project);
+	}
+	
+	/**
+	 * 删除项目
+	 */
+	@Override
+	public int delProject(Integer id) {
+		return projectMgr.deleteByPrimaryKey(id);
+	}
 
 }

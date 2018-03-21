@@ -22,6 +22,7 @@ import com.sansan.dao.Project;
 import com.sansan.dao.User;
 import com.sansan.service.ProjectService;
 import com.sansan.service.UserService;
+import com.sun.org.apache.xpath.internal.functions.Function;
 
 
 
@@ -61,8 +62,10 @@ public class ProjectController {
 	public ModelAndView addAndUpdateView(HttpServletRequest request){
 		String contextpath = request.getContextPath();
 		Map<String ,Object> model=new HashMap<String,Object>();
-		 
+		String id = request.getParameter("id");
+		
 		model.put("contextPath",contextpath);
+		model.put("id", id);
 		
 		return new ModelAndView("Project/addAndUpdate",model);
 	}
@@ -76,6 +79,9 @@ public class ProjectController {
 	@RequestMapping("/insertProject")
 	public @ResponseBody Object insertProject(HttpServletRequest request, Model model){
 		try{
+			String id = request.getParameter("id");
+			System.out.println("+++++++++++++++"+id+"++++++++++++++++++++++");
+			
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 			Date currentTime = new Date();
 			
@@ -91,32 +97,59 @@ public class ProjectController {
 			
 			String description = request.getParameter("description");//项目描述
 			Integer status = 0;
-			
-			if(StringUtils.isEmpty(title)||principalID==0||StringUtils.isEmpty(memberID)||StringUtils.isEmpty(description)){
-				model.addAttribute("code", 100);
-				model.addAttribute("msg", "缺少必填参数！");
-				return model;
-			}else{
-				Project project = new Project();
-				project.setTitle(title);
-				project.setPrincipalid(principalID);
-				project.setMemberid(memberID);
-				project.setStarttime(startTime);
-				project.setEndtime(endTime);
-				project.setDescription(description);
-				project.setStatus(status);
-				
-				Project projectTwo = projectServ.getProjectByTitle(title);
-				if(projectTwo != null){
-					model.addAttribute("code", 102);
-					model.addAttribute("msg", "项目已存在，请勿重复添加！");
+			if(id.isEmpty()){//新增项目记录
+				if(StringUtils.isEmpty(title)||principalID==0||StringUtils.isEmpty(memberID)||StringUtils.isEmpty(description)){
+					model.addAttribute("code", 100);
+					model.addAttribute("msg", "缺少必填参数！");
+					return model;
 				}else{
-					projectServ.insertProject(project);
-					model.addAttribute("code", 103);
-					model.addAttribute("msg","项目添加成功！");
+					Project project = new Project();
+					project.setTitle(title);
+					project.setPrincipalid(principalID);
+					project.setMemberid(memberID);
+					project.setStarttime(startTime);
+					project.setEndtime(endTime);
+					project.setDescription(description);
+					project.setStatus(status);
+					
+					Project projectTwo = projectServ.getProjectByTitle(title);
+					if(projectTwo != null){
+						model.addAttribute("code", 102);
+						model.addAttribute("msg", "项目已存在，请勿重复添加！");
+					}else{
+						projectServ.insertProject(project);
+						model.addAttribute("code", 103);
+						model.addAttribute("msg","项目添加成功！");
+					}
 				}
-				return model;
+			}else{//编辑项目名称
+				if(StringUtils.isEmpty(title)||principalID==0||StringUtils.isEmpty(memberID)||StringUtils.isEmpty(description)){
+					model.addAttribute("code", 100);
+					model.addAttribute("msg", "缺少必填参数！");
+					return model;
+				}else{
+					Project project = new Project();
+					project.setId(Integer.valueOf(id));
+					project.setTitle(title);
+					project.setPrincipalid(principalID);
+					project.setMemberid(memberID);
+					project.setStarttime(startTime);
+					project.setEndtime(endTime);
+					project.setDescription(description);
+					project.setStatus(status);
+					
+					int update = projectServ.updateProject(project);
+					if(update!=0){
+						model.addAttribute("code", 104);
+						model.addAttribute("msg", "项目编辑成功！");
+					}else{
+						model.addAttribute("code", 105);
+						model.addAttribute("msg", "项目编辑失败！");
+					}
+				}
 			}
+				return model;
+			
 		}catch(Exception e){
 			log.info(e);
 			model.addAttribute("code", 101);
@@ -200,4 +233,32 @@ public class ProjectController {
 		return model;
 	}
 	
+	/**
+	 * 通过项目ID获取项目基本信息
+	 * @param request id
+	 * @param model {"data":{"id":1,"total":null,"description":"一款风靡全球的减压小游戏","status":0,"page":null,"title":"微信跳一跳小程序","principalid":1,"starttime":1516435605000,"endtime":1518682009000,"principalname":null,"membername":null,"memberid":"1,2"}}
+	 * @return
+	 */
+	@RequestMapping("/getProjectInfoById")
+	public @ResponseBody Object getProjectInfoById(HttpServletRequest request, Model model){
+		String id = request.getParameter("id");
+		Project project = projectServ.getProjectById(id);
+		model.addAttribute("data", project);
+		return model;
+	}
+	
+	@RequestMapping("/delProject")
+	public @ResponseBody Object delproject(HttpServletRequest request,	Model model){
+		String id = request.getParameter("id");
+		int delID = projectServ.delProject(Integer.valueOf(id));
+		System.out.println(delID);
+		if(delID != 0){
+			model.addAttribute("code", 100);
+			model.addAttribute("msg", "项目删除成功!");
+		}else{
+			model.addAttribute("code", 101);
+			model.addAttribute("msg", "项目删除失败！");
+		}
+		return model;
+	}
 }

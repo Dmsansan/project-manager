@@ -16,5 +16,11 @@ public interface ProjectService {
 
 	Project getProjectByTitle(String title);
 
+	Project getProjectById(String id);
+
+	int updateProject(Project project);
+
+	int delProject(Integer integer);
+
 
 }
