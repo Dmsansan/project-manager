@@ -41,7 +41,7 @@
   <select id="getProjectList" resultMap="ProjectListResultMap" parameterType="map">
 	select
 	<include refid="Get_Project_List" />
-	from mf_project as a left join mf_user as b on a.principalID=b.userID LIMIT #{start},#{end} 
+	from mf_project as a left join mf_user as b on a.principalID=b.userID ORDER BY a.id ASC LIMIT #{start},#{end} 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from mf_project

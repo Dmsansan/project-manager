@@ -44,16 +44,15 @@
                                 <div class="am-form-group">
                                     <label for="user-email" class="am-u-sm-3 am-form-label">项目负责人</label>
                                     <div class="am-u-sm-9">
-                                        <select data-am-selected="{btnWidth: '100%', btnSize: 'sm'}" id="principalID" required>
+                                        <select  id="principalID" >
 										  
 										</select>
                                     </div>
-                                </div>
-
+                                </div> 
                                 <div class="am-form-group">
                                     <label for="user-phone" class="am-u-sm-3 am-form-label">项目组成员</label>
                                     <div class="am-u-sm-9">
-                                        <select multiple data-am-selected="{btnWidth: '100%', btnSize: 'sm'}" id="memberID" required>
+                                        <select multiple   id="memberID" required>
 										 
 										</select>
                                     </div>
@@ -98,35 +97,11 @@
 <script src="${contextPath}/resources/layer/layer.js"></script>
  	<script>
  	$(function(){
- 		//加载成员信息
- 		$.post("${contextPath}/user/getAllUser","",function(res){
- 			var data=res.data;
- 			if(data){
- 				for(var i=0;i<data.length;i++){
- 					document.getElementById("principalID").innerHTML +=' <option value="'+data[i].userID+'">'+data[i].name+'</option>';
- 				}
- 				for(var i=0;i<data.length;i++){
- 					document.getElementById("memberID").innerHTML +=' <option value="'+data[i].userID+'">'+data[i].name+'</option>';
- 				}
- 			}
- 		},"json");
  		
- 		//初始化项目信息
- 		$.post("${contextPath}/project/getProjectInfoById/?id=${id}","",function(res){
- 			console.log(res.data);
- 			var data = res.data;
- 			if(data){
-	 			$('#id').val(data.id);
-	 			$('#title').val(data.title);
-	
-	 			$('#principalID').val(data.principalid);
-	 			$('#memberID').val(data.memberid);
-	 			
-	 			$('#startTime').datepicker('setValue',data.starttime);
-	 			$('#endTime').datepicker('setValue', data.endtime);
-	 			$('#description').val(data.description);
- 			}
- 		});
+ 		getAllUser();
+ 		
+ 		getProjectInfo();
+ 		
  		//新增项目按钮绑定
  		$('#saveData').bind('click',function(){
  			var id = $('#id').val();
@@ -181,6 +156,40 @@
  			}
  		})
  	})
+ 	//加载成员信息
+ 	function getAllUser(){
+ 		$.post("${contextPath}/user/getAllUser","",function(res){
+ 			var data=res.data;
+ 			if(data){
+ 				for(var i=0;i<data.length;i++){
+ 					document.getElementById("principalID").innerHTML +=' <option value="'+data[i].userID+'">'+data[i].name+'</option>';
+ 				}
+ 				for(var i=0;i<data.length;i++){
+ 					document.getElementById("memberID").innerHTML +=' <option value="'+data[i].userID+'">'+data[i].name+'</option>';
+ 				}
+ 			}
+ 		},"json");
+ 	}
+ 	//初始化项目信息
+ 	function getProjectInfo(){
+		$.post("${contextPath}/project/getProjectInfoById/?id=${id}","",function(res){
+			console.log(res.data);
+			var data = res.data;
+			if(data){
+ 			$('#id').val(data.id);
+ 			$('#title').val(data.title);
+			
+ 			$('#principalID').val(data.principalid);
+ 			var arr = data.memberid.split(",");
+ 		
+ 			$('#memberID').val(arr).trigger('change');
+ 			
+ 			$('#startTime').datepicker('setValue',data.starttime);
+ 			$('#endTime').datepicker('setValue', data.endtime);
+ 			$('#description').val(data.description);
+			}
+		});
+ 	}
  	</script>
 </body>
 

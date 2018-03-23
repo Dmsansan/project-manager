@@ -425,7 +425,7 @@
            shadeClose: true,
            shade: 0.3,
            maxmin: true, //开启最大化最小化按钮
-           area: ['893px', '600px'],
+           area: ['893px','620px'],
            content: '${contextPath}/project/addAndUpdateView/?id='+id,
            end: function () {
                location.reload();
