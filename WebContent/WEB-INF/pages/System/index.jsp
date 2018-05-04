@@ -175,7 +175,14 @@
                             <span>项目管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="projectCount">  </i>
                         </a>
                     </li>
-						
+					
+					<li class="tpl-left-nav-item">
+                        <a href="${contextPath}/admins/list" class="nav-link tpl-left-nav-link-list">
+                            <i class="am-icon-users"></i>
+                            <span>用户管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="projectCount">  </i>
+                        </a>
+                    </li>
+                    
                     <li class="tpl-left-nav-item">
                         <a href="${contextPath}/login.jsp" class="nav-link tpl-left-nav-link-list">
                             <i class="am-icon-key"></i>

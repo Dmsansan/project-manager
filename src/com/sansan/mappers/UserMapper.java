@@ -35,5 +35,17 @@ public interface UserMapper {
 	 * @return
 	 */
 	List<User> getAllUser();
+	
+	/**
+	 * 获取用户列表信息
+	 * @return
+	 */
+	List<User> getListAdmins();
+	
+	/**
+	 * 获取用户总数量
+	 * @return
+	 */
+	int getCountAdmins();
 
 }

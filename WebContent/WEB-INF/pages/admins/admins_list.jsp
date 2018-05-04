@@ -5,8 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>项目列表</title>
-    <meta name="description" content="项目、列表、管理、进度">
+    <title>用户列表</title>
+    <meta name="description" content="用户、列表、管理、会员">
     <meta name="keywords" content="project,manager,prossce">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -167,16 +167,16 @@
                         </a>
                     </li>
                     <li class="tpl-left-nav-item">
-                        <a href="#" class="nav-link  active">
+                        <a href="${contextPath}/project/view" class="nav-link">
                             <i class="am-icon-bar-chart"></i>
                             <span>项目管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="projectCount">  </i>
                         </a>
                     </li>
 					
 					<li class="tpl-left-nav-item">
-                        <a href="${contextPath}/admins/list" class="nav-link">
+                        <a href="#" class="nav-link  active">
                             <i class="am-icon-users"></i>
-                            <span>用户管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="projectCount">  </i>
+                            <span>用户管理</span>  <i class="tpl-left-nav-content tpl-badge-danger" id="adminsCount">  </i>
                         </a>
                     </li>
                     
@@ -196,16 +196,16 @@
 
         <div class="tpl-content-wrapper">
             <div class="tpl-content-page-title">
-               	项目列表
+               	用户列表
             </div>
             <ol class="am-breadcrumb">
                 <li><a href="${contextPath}/index" class="am-icon-home">首页</a></li>
-                <li class="am-active">项目列表</li>
+                <li class="am-active">用户列表</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 项目列表
+                        <span class="am-icon-code"></span> 用户列表
                     </div>
                 </div>
                 <div class="tpl-block">
@@ -220,17 +220,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="am-u-sm-12 am-u-md-3">
-                            <div class="am-form-group">
-                                <select data-am-selected="{btnSize: 'sm'}">
-					              <option value="0">项目状态</option>
-					              <option value="1">正在进行中</option>
-					              <option value="2">完成</option>
-					              <option value="3">挂起</option>
-					              <option value="4">延期</option>
-					            </select>
-                            </div>
-                        </div>
+                        
                         <div class="am-u-sm-12 am-u-md-3">
                             <div class="am-input-group am-input-group-sm">
                                 <input type="text" class="am-form-field">
@@ -246,18 +236,18 @@
                                 <table class="am-table am-table-striped am-table-hover table-main" id="project">
                                     <thead>
                                         <tr>
-                                            <th class="table-id" style="width:100px;">项目ID</th>
-                                            <th class="table-title">项目名称</th>
-                                            <th class="table-type">项目负责人</th>
-                                            <th class="table-type">项目组成员</th>
-                                            <th class="table-author am-hide-sm-only">项目开始时间</th>
-                                            <th class="table-author am-hide-sm-only">项目结束时间</th>
-                                            <th class="table-author am-hide-sm-only">项目进度</th>
-                                            <th class="table-date am-hide-sm-only">项目状态</th>
+                                            <th class="table-id" style="width:100px;">用户ID</th>
+                                            <th class="table-title">姓名</th>
+                                            <th class="table-type">用户名</th>
+                                            <th class="table-type">性别</th>
+                                            <th class="table-author am-hide-sm-only">年龄</th>
+                                            <th class="table-author am-hide-sm-only">职位</th>
+                                            <th class="table-author am-hide-sm-only">联系方式</th>
+                                            <th class="table-date am-hide-sm-only">注册时间</th>
                                             <th class="table-set">操作</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="projectList">
+                                    <tbody id="adminsList">
                                         
                                     </tbody>
                                 </table>
@@ -291,17 +281,6 @@
     <script>
     var pageNum = 10;//默认每页显示的数量10条
     var page;//当前页
-    //时间转换为年月日
-    function timeToDate(time){
-    	var date = new Date(time);
-    	Y = date.getFullYear() + '-';
-    	M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-    	D = date.getDate() + ' ';
-    	//h = date.getHours() + ':';
-    	//m = date.getMinutes() + ':';
-    	//s = date.getSeconds(); 
-    	return Y+M+D; 
-    }
     //新增项目窗口
     function add(){
         layer.open({
@@ -317,22 +296,22 @@
             }
           });
     }
-  //获取项目数量
-    function getProjectCount(){
+    //获取总用户数量
+    function getAdminsCount(){
     	$.ajax({
-    		url:'${contextPath}/project/getCountProject',
+    		url:'${contextPath}/admins/getCountAdmins',
     		type:'get',
     		dataType:'json',
     		success:function(data){
-    			$('#projectCount').text(data.count);	
+    			$('#adminsCount').text(data.count);	
     		}
     	})
     }
     $(document).ready(function(){
-    	getProjectCount();
+    	getAdminsCount();
     	
     	$.ajax({
-    		url:"list",
+    		url:"listData",
     		type:"post",
     		dataType:"json",
     		success:function(res){
@@ -382,41 +361,28 @@
     function loadData(data){
     	$('#projectList').empty();
     	for(var i=0;i<data.length;i++){
-			//项目状态
-			var status;
-			var startDate=timeToDate(data[i].starttime);
-			var endDate=timeToDate(data[i].endtime);
-			switch(data[i].status){
-				case 0 : status="正常进行中";break;
-				case 1 : status="完成";break;
-				case 2 : status="挂起";break;
-				case 3 : staus="延期";break;
+			//用户性别
+			var sex;
+			switch(data[i].sex){
+				case 0 : sex="男";break;
+				case 1 : sex="女";break;
+				case 2 : sex="保密";break;
 				default: status="未知";
 			}
-			//项目进度
-			var now = new Date().getTime();
-			//alert((data[i].endtime-data[i].starttime)/86400000);
-			var process = 0;
-			if(Math.ceil(((now-data[i].starttime)/(data[i].endtime-data[i].starttime))*100)>=100){
-				process = 100;
-			}else{
-				process = Math.ceil(((now-data[i].starttime)/(data[i].endtime-data[i].starttime))*100);
-			}
-			
-			document.getElementById("projectList").innerHTML += '<tr>'+
-            '<td>'+data[i].id+'</td>'+
-            '<td><a href="#">'+data[i].title+'</a></td>'+
-            '<td>'+data[i].principalname+'</td>'+
-            '<td>'+data[i].membername+'</td>'+
-            '<td class="am-hide-sm-only">'+startDate+'</td>'+
-            '<td class="am-hide-sm-only">'+endDate+'</td>'+
-            '<td class="am-hide-sm-only"><div class="am-progress" style="margin-bottom:0px;"><div class="am-progress-bar" style="width: '+process+'%">'+process+'%</div></div></td>'+
-            '<td class="am-hide-sm-only">'+status+'</td>'+
+			document.getElementById("adminsList").innerHTML += '<tr>'+
+            '<td>'+data[i].userID+'</td>'+
+            '<td><a href="#">'+data[i].name+'</a></td>'+
+            '<td>'+data[i].userName+'</td>'+
+            '<td>'+sex+'</td>'+
+            '<td class="am-hide-sm-only">'+data[i].age+'</td>'+
+            '<td class="am-hide-sm-only">'+data[i].position.name+'</td>'+
+            '<td class="am-hide-sm-only">'+data[i].phone+'</td>'+
+            '<td class="am-hide-sm-only">'+data[i].logStamp+'</td>'+
             '<td>'+
                 '<div class="am-btn-toolbar">'+
                     '<div class="am-btn-group am-btn-group-xs">'+
-                        '<button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="update('+data[i].id+')"><span class="am-icon-pencil-square-o"></span> 编辑</button>'+
-                        '<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del('+data[i].id+')"><span class="am-icon-trash-o"></span> 删除</button>'+
+                        '<button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="update('+data[i].userID+')"><span class="am-icon-pencil-square-o"></span> 编辑</button>'+
+                        '<button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" onclick="del('+data[i].userID+')"><span class="am-icon-trash-o"></span> 删除</button>'+
                     '</div>'+
                 '</div>'+
            ' </td>'+

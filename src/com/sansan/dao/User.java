@@ -1,5 +1,6 @@
 package com.sansan.dao;
 
+
 public class User {
 	private Integer userID;
 	private String userName;
@@ -11,10 +12,21 @@ public class User {
 	private String address;
 	private Integer positionID;
 	private String logStamp;
+	//属性集合
+	private Position position;
+	
 	public User(){
 		
 	}
 	
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
 	public Integer getUserID() {
 		return userID;
 	}
@@ -88,5 +100,14 @@ public class User {
 
 	public void setLogStamp(String logStamp) {
 		this.logStamp = logStamp;
+	}
+
+	
+
+	@Override
+	public String toString() {
+		return "User [userID=" + userID + ", userName=" + userName + ", passWord=" + passWord + ", name=" + name
+				+ ", sex=" + sex + ", age=" + age + ", phone=" + phone + ", address=" + address + ", positionID="
+				+ positionID + ", logStamp=" + logStamp + ", position=" + position + "]";
 	}
 }

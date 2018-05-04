@@ -55,5 +55,21 @@ public class UserServiceImpl implements UserService{
 		return userMapper.getAllUser();
 	}
 	
+	/**
+	 * 获取用户列表信息
+	 */
+	@Override
+	public List<User> getListAdmins() {
+		return userMapper.getListAdmins();
+	}
+	
+	/**
+	 * 获取用户数量
+	 */
+	@Override
+	public int getCountAdmins() {
+		return userMapper.getCountAdmins();
+	}
+	
 	
 }

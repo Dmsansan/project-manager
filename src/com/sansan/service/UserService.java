@@ -7,6 +7,11 @@ import com.sansan.dao.User;
 
 public interface UserService {
 	String SERVICE_NAME = "userService";
+	/**
+	 * 根据用户ID获取用户信息
+	 * @param i
+	 * @return
+	 */
 	List<User> getUserInfo(int i);
 	
 	/**
@@ -35,5 +40,17 @@ public interface UserService {
 	 * @return
 	 */
 	List<User> getAllUser();
+	
+	/**
+	 * 获取用户列表信息
+	 * @return
+	 */
+	List<User> getListAdmins();
+	
+	/**
+	 * 获取用户总的数量
+	 * @return
+	 */
+	int getCountAdmins();
 
 }
