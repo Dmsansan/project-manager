@@ -1,5 +1,6 @@
 package com.sansan.dao;
 
+import java.util.Date;
 
 public class User {
 	private Integer userID;
@@ -11,7 +12,8 @@ public class User {
 	private String phone;
 	private String address;
 	private Integer positionID;
-	private String logStamp;
+	private Date logStamp;
+	
 	//属性集合
 	private Position position;
 	
@@ -93,16 +95,16 @@ public class User {
 	public void setPositionID(Integer positionID) {
 		this.positionID = positionID;
 	}
+	
+	
 
-	public String getLogStamp() {
+	public Date getLogStamp() {
 		return logStamp;
 	}
 
-	public void setLogStamp(String logStamp) {
+	public void setLogStamp(Date logStamp) {
 		this.logStamp = logStamp;
 	}
-
-	
 
 	@Override
 	public String toString() {

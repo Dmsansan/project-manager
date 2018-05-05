@@ -12,7 +12,7 @@
 		<result property="phone" jdbcType="VARCHAR" column="phone" />
 		<result property="address" jdbcType="VARCHAR" column="address" />
 		<result property="positionID" jdbcType="INTEGER" column="positionID" />
-		<result property="logStamp" jdbcType="VARCHAR" column="logStamp" />
+		<result property="logStamp" jdbcType="TIMESTAMP" column="logStamp" />
 	</resultMap>
 	
 	<resultMap id="getListAdmins" type="com.sansan.dao.User">
@@ -25,7 +25,7 @@
 		<result property="phone" jdbcType="VARCHAR" column="phone" />
 		<result property="address" jdbcType="VARCHAR" column="address" />
 		<result property="positionID" jdbcType="INTEGER" column="positionID" />
-		<result property="logStamp" jdbcType="VARCHAR" column="logStamp" />
+		<result property="logStamp" jdbcType="TIMESTAMP" column="logStamp" />
 		
 		<association property="position" javaType="com.sansan.dao.Position">
 	    	<id column="positionID" jdbcType="INTEGER" property="positionID"/>
