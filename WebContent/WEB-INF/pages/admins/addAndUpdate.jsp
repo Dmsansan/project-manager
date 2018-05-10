@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" 
-           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>项目列表</title>
-    <meta name="description" content="项目、列表、管理、进度">
+    <title>用户列表</title>
+    <meta name="description" content="用户、列表、管理、权限">
     <meta name="keywords" content="project,manager,prossce">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -26,15 +24,7 @@
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 
-	                       <c:choose>
-							   <c:when test="${id==0}"> 
-							                           项目添加      
-							   </c:when>
-							   <c:otherwise>
-							    	项目编辑
-							   </c:otherwise>
-							</c:choose>
+                        <span class="am-icon-code"></span> 用户添加
                     </div>
                 </div>
                 <div class="tpl-block ">
@@ -45,47 +35,51 @@
                         <div class="am-u-sm-12 am-u-md-9">
                             <form class="am-form am-form-horizontal" onsubmit="return false">
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">项目名称</label>
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
                                     <div class="am-u-sm-9">
-                                        <input type="text" id="title" placeholder="项目名称" required />
+                                        <input type="text" id="name" placeholder="姓名" required />
                                         <input type="hidden" id="id" />
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-email" class="am-u-sm-3 am-form-label">项目负责人</label>
+                                    <label for="user-email" class="am-u-sm-3 am-form-label">用户名</label>
                                     <div class="am-u-sm-9">
-                                        <select  id="principalID" >
-										  
-										</select>
+                                        <input type="text" id="username" placeholder="用户名" required />
                                     </div>
                                 </div> 
+                               <div class="am-form-group">
+								  <label for="user-email" class="am-u-sm-3 am-form-label">性别</label>
+								  <div class="am-u-sm-9">
+								  <label class="am-radio-inline">
+								    <input type="radio" name="radio10" value="male" data-am-ucheck> 男
+								  </label>
+								  <label class="am-radio-inline">
+								    <input type="radio" name="radio10" value="female" data-am-ucheck> 女
+								  </label>
+								  <label class="am-radio-inline">
+								    <input type="radio" name="radio10" value="pig" data-am-ucheck> 保密
+								  </label>
+								  </div>
+								</div>
+
                                 <div class="am-form-group">
-                                    <label for="user-phone" class="am-u-sm-3 am-form-label">项目组成员</label>
+                                    <label for="user-QQ" class="am-u-sm-3 am-form-label">年龄</label>
                                     <div class="am-u-sm-9">
-                                        <select multiple   id="memberID" required>
-										 
-										</select>
+                                       <input type="number" class="am-form-field" placeholder="年龄" id="startTime"  required />
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
-                                    <label for="user-QQ" class="am-u-sm-3 am-form-label">项目开始时间</label>
+                                    <label for="user-weibo" class="am-u-sm-3 am-form-label">职位</label>
                                     <div class="am-u-sm-9">
-                                       <input type="text" class="am-form-field" placeholder="项目开始时间" id="startTime" data-am-datepicker  required />
+                                        <input type="text" class="am-form-field" placeholder="职位" id="position" required />
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
-                                    <label for="user-weibo" class="am-u-sm-3 am-form-label">项目结束时间</label>
+                                    <label for="user-intro" class="am-u-sm-3 am-form-label">联系方式</label>
                                     <div class="am-u-sm-9">
-                                        <input type="text" class="am-form-field" placeholder="项目结束时间" id="endTime" data-am-datepicker required />
-                                    </div>
-                                </div>
-
-                                <div class="am-form-group">
-                                    <label for="user-intro" class="am-u-sm-3 am-form-label">项目简介</label>
-                                    <div class="am-u-sm-9">
-                                        <textarea class="" rows="5"  placeholder="输入项目简介" id="description" required ></textarea>
+                                        <input type="text" class="am-form-field" placeholder="联系方式" id="phone" required />
                                     </div>
                                 </div>
 

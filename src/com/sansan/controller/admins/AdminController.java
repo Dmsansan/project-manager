@@ -74,4 +74,26 @@ public class AdminController {
 		return model;
 	}
 	
+	/**
+	 * 跳转用户添加编辑界面
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/addAndUpdateView")
+	public ModelAndView addAndUpdateView(HttpServletRequest request){
+		try{
+			String contextPath = request.getContextPath();
+			String id = request.getParameter("id");
+			
+			Map<String, Object> model = new HashMap<String,Object>();
+			model.put("contextPath", contextPath);
+			model.put("id", id);
+			
+			return new ModelAndView("admins/addAndUpdate",model);
+		}catch(Exception e){
+			log.info(e);
+			return new ModelAndView("info/error");
+		}
+	}
+	
 }

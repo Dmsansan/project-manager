@@ -281,7 +281,20 @@
     <script>
     var pageNum = 10;//默认每页显示的数量10条
     var page;//当前页
-    //新增项目窗口
+    
+    //时间转换为年月日
+    function timeToDate(time){
+    	var date = new Date(time);
+    	Y = date.getFullYear() + '-';
+    	M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+    	D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+    	h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+    	m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+    	s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds()); 
+    	return Y+M+D+""+h+m+s; 
+    }
+    
+    //新增用户窗口
     function add(){
         layer.open({
             type: 2,
@@ -290,7 +303,7 @@
             shade: 0.3,
             maxmin: true, //开启最大化最小化按钮
             area: ['893px', '600px'],
-            content: '${contextPath}/project/addAndUpdateView/?id=0',
+            content: '${contextPath}/admins/addAndUpdateView/?id=0',
             end: function () {
                 location.reload();
             }
@@ -377,7 +390,7 @@
             '<td class="am-hide-sm-only">'+data[i].age+'</td>'+
             '<td class="am-hide-sm-only">'+data[i].position.name+'</td>'+
             '<td class="am-hide-sm-only">'+data[i].phone+'</td>'+
-            '<td class="am-hide-sm-only">'+data[i].logStamp+'</td>'+
+            '<td class="am-hide-sm-only">'+timeToDate(data[i].logStamp)+'</td>'+
             '<td>'+
                 '<div class="am-btn-toolbar">'+
                     '<div class="am-btn-group am-btn-group-xs">'+
