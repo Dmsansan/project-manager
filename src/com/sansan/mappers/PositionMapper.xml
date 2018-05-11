@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sansan.mappers.PositionMapper">
+  <resultMap id="BaseResultMap" type="com.sansan.dao.Position">
+    <id column="positionID" jdbcType="INTEGER" property="positionid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="numbers" jdbcType="INTEGER" property="numbers" />
+  </resultMap>
+  
+  <resultMap id="getAllResultMap" type="com.sansan.dao.Position">
+  	<id column="positionID" jdbcType="INTEGER" property="positionid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    positionID, name, numbers
+  </sql>
+  
+  <sql id="All_Position">
+  	positionID, name 
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mf_position
+    where positionID = #{positionid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mf_position
+    where positionID = #{positionid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sansan.dao.Position">
+    insert into mf_position (positionID, name, numbers
+      )
+    values (#{positionid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{numbers,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sansan.dao.Position">
+    insert into mf_position
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="positionid != null">
+        positionID,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="numbers != null">
+        numbers,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="positionid != null">
+        #{positionid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="numbers != null">
+        #{numbers,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sansan.dao.Position">
+    update mf_position
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="numbers != null">
+        numbers = #{numbers,jdbcType=INTEGER},
+      </if>
+    </set>
+    where positionID = #{positionid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sansan.dao.Position">
+    update mf_position
+    set name = #{name,jdbcType=VARCHAR},
+      numbers = #{numbers,jdbcType=INTEGER}
+    where positionID = #{positionid,jdbcType=INTEGER}
+  </update>
+  <!-- 获取positionID name -->
+  <select id="getAllPosition" resultMap="getAllResultMap">
+  		select 
+  		<include refid="All_Position" />
+  		from mf_position
+  </select>
+  
+</mapper>

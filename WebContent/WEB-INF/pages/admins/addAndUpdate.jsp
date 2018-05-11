@@ -31,8 +31,7 @@
 
                     <div class="am-g tpl-amazeui-form">
 
-
-                        <div class="am-u-sm-12 am-u-md-9">
+                        <div class="am-u-sm-5 am-u-md-9">
                             <form class="am-form am-form-horizontal" onsubmit="return false">
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
@@ -51,13 +50,13 @@
 								  <label for="user-email" class="am-u-sm-3 am-form-label">性别</label>
 								  <div class="am-u-sm-9">
 								  <label class="am-radio-inline">
-								    <input type="radio" name="radio10" value="male" data-am-ucheck> 男
+								    <input type="radio" name="sex" value="0" data-am-ucheck> 男
 								  </label>
 								  <label class="am-radio-inline">
-								    <input type="radio" name="radio10" value="female" data-am-ucheck> 女
+								    <input type="radio" name="sex" value="1" data-am-ucheck> 女
 								  </label>
 								  <label class="am-radio-inline">
-								    <input type="radio" name="radio10" value="pig" data-am-ucheck> 保密
+								    <input type="radio" name="sex" value="2" data-am-ucheck> 保密
 								  </label>
 								  </div>
 								</div>
@@ -65,7 +64,7 @@
                                 <div class="am-form-group">
                                     <label for="user-QQ" class="am-u-sm-3 am-form-label">年龄</label>
                                     <div class="am-u-sm-9">
-                                       <input type="number" class="am-form-field" placeholder="年龄" id="startTime"  required />
+                                       <input type="number" class="am-form-field" placeholder="年龄" id="age"  required />
                                     </div>
                                 </div>
 
