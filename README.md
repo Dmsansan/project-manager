@@ -1,6 +1,7 @@
 # SSM spring+springmvc+mybatis框架ProjectManager IDEA
 
 基于JAVA开发的SSM框架系统学习
+
 1、账号登录系统
 	
 	1、自动登录功能：用户登陆系统后如果不注销登录状态，下次通过浏览器输入域名可以直接访问该网站。
