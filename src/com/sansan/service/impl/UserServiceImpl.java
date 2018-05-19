@@ -71,5 +71,13 @@ public class UserServiceImpl implements UserService{
 		return userMapper.getCountAdmins();
 	}
 	
+	/**
+	 * 添加用户
+	 */
+	@Override
+	public int insertAdmin(User user) {
+		return userMapper.insertAdmin(user);
+	}
+	
 	
 }

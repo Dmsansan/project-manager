@@ -52,5 +52,13 @@ public interface UserService {
 	 * @return
 	 */
 	int getCountAdmins();
+	
+	/**
+	 * 添加用户
+	 * @param user
+	 * @return
+	 */
+	int insertAdmin(User user);
+	
 
 }

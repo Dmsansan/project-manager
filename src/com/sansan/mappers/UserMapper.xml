@@ -28,7 +28,7 @@
 		<result property="logStamp" jdbcType="TIMESTAMP" column="logStamp" />
 		
 		<association property="position" javaType="com.sansan.dao.Position">
-	    	<id column="positionID" jdbcType="INTEGER" property="positionID"/>
+	    	<id column="positionID" jdbcType="INTEGER" property="positionid"/>
 	    	<result  column="positionName" jdbcType="VARCHAR" property="name"/>
 	    	<result  column="numbers" jdbcType="INTEGER" property="numbers"/>
 	    </association>
@@ -123,6 +123,16 @@
 		INSERT INTO mf_user (userName,passWord,logStamp) VALUES (#{userName},#{passWord},#{logStamp})
 	</insert>
 	
+	<!-- 用户列表页面添加用户 -->
+	<insert id="insertAdmin" parameterType="com.sansan.dao.User">
+		<selectKey resultType="INTEGER" order="AFTER" keyProperty="userID">
+			SELECT LAST_INSERT_ID() AS userID
+		</selectKey>
+
+		INSERT INTO mf_user (name,userName,passWord,sex,age,phone,address,positionID,logStamp) VALUES (#{name},#{userName},#{passWord},#{sex},#{age},
+		#{phone},#{address},#{positionID},now())
+
+	</insert>
 	<!-- 获取用户列表信息 -->
 	<select id="getListAdmins" resultMap="getListAdmins">
 		SELECT 

@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sansan.BaseController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sansan.dao.User;
 import com.sansan.service.UserService;
+import sun.security.util.Password;
 
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController{
 	// 日志记录
     private static final Logger log = Logger.getLogger(User.class);
     
@@ -200,5 +202,56 @@ public class UserController {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 新增用户插入数据接口
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/addAdmins")
+	public @ResponseBody Object addAdmins(HttpServletRequest request,Model model){
+		try{
+			String name = request.getParameter("name");//姓名
+			String userName = request.getParameter("userName");//用户名
+			String passWord = request.getParameter("passWord");//密码
+			int sex = ParameIsNull(request.getParameter("sex"))? -1:Integer.parseInt(request.getParameter("sex"));//性别 0:保密 1:男性 2:女性
+			int age = ParameIsNull(request.getParameter("age"))? 0:Integer.parseInt(request.getParameter("age"));//年龄
+			String phone = request.getParameter("phone");//联系方式
+			String address= request.getParameter("address");//地址
+			int positionID= ParameIsNull(request.getParameter("positionID"))? 0:Integer.parseInt(request.getParameter("positionID"));//职位ID
+
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+			String date = df.format(new Date());
+
+			if(ParameIsNull(name) || ParameIsNull(userName) || ParameIsNull(passWord) || sex==-1 || age==0 || ParameIsNull(phone) || ParameIsNull(address) || positionID==0){
+				model.addAttribute("msg","need must variable...");
+				model.addAttribute("code",2);
+			}else{
+				User user= new User();
+
+				user.setName(name);
+				user.setUserName(userName);
+				user.setPassWord(passWord);
+				user.setSex(sex);
+				user.setAge(age);
+				user.setPhone(phone);
+				user.setAddress(address);
+				user.setPositionID(positionID);
+
+				int userID = userService.insertAdmin(user);//影响的记录条数
+
+                System.out.println("+++++++++++++++++"+user.getUserID());
+				model.addAttribute("msg","success...");
+				model.addAttribute("code",1);
+			}
+
+		}catch(Exception e){
+			log.info(e);
+			model.addAttribute("msg","service error...");
+			model.addAttribute("code",0);
+		}
+		return model;
 	}
 }

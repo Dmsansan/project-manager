@@ -15,10 +15,13 @@ public class PositionServiceImpl implements PositionService{
 	@Autowired
 	private PositionMapper position;
 	
+	/**
+	 * 获取职位列表 positionID name
+	 */
 	@Override
 	public List<Position> getAllPosition() {
 		List<Position> list = position.getAllPosition();
 		return list;
 	}
-
+	
 }
