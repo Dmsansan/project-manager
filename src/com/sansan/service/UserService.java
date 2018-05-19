@@ -45,7 +45,7 @@ public interface UserService {
 	 * 获取用户列表信息
 	 * @return
 	 */
-	List<User> getListAdmins();
+	List<User> getListAdmins(Map<String,Object> map);
 	
 	/**
 	 * 获取用户总的数量
@@ -59,6 +59,18 @@ public interface UserService {
 	 * @return
 	 */
 	int insertAdmin(User user);
-	
 
+	/**
+	 * 编辑用户信息
+	 * @param user
+	 * @return
+	 */
+	int updateUserInfo(User user);
+
+	/**
+	 * 删除用户信息
+	 * @param userID
+	 * @return
+	 */
+	int delUserInfo(int userID);
 }

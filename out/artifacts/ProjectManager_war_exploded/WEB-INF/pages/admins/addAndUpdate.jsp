@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -24,7 +26,14 @@
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 用户添加
+                        <span class="am-icon-code"></span>  <c:choose>
+                        <c:when test="${userID==0}">
+                            用户添加
+                        </c:when>
+                        <c:otherwise>
+                            用户编辑
+                        </c:otherwise>
+                    </c:choose>
                     </div>
                 </div>
                 <div class="tpl-block ">
@@ -34,20 +43,20 @@
                         <div class="am-u-sm-5 am-u-md-9">
                             <form class="am-form am-form-horizontal" onsubmit="return false">
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">姓名</label>
+                                    <label  class="am-u-sm-3 am-form-label">姓名</label>
                                     <div class="am-u-sm-9">
                                         <input type="text" id="name" placeholder="姓名" required />
                                         <input type="hidden" id="id" />
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-email" class="am-u-sm-3 am-form-label">用户名</label>
+                                    <label  class="am-u-sm-3 am-form-label">用户名</label>
                                     <div class="am-u-sm-9">
                                         <input type="email" id="username" placeholder="用户名" required />
                                     </div>
                                 </div> 
                                <div class="am-form-group">
-								  <label for="user-email" class="am-u-sm-3 am-form-label">性别</label>
+								  <label  class="am-u-sm-3 am-form-label">性别</label>
 								  <div class="am-u-sm-9">
 								  <label class="am-radio-inline">
 								    <input type="radio" name="sex" value="0" data-am-ucheck> 男
@@ -62,14 +71,14 @@
 								</div>
 
                                 <div class="am-form-group">
-                                    <label for="user-QQ" class="am-u-sm-3 am-form-label">年龄</label>
+                                    <label  class="am-u-sm-3 am-form-label">年龄</label>
                                     <div class="am-u-sm-9">
                                        <input type="number" class="am-form-field" placeholder="年龄" id="age"  required />
                                     </div>
                                 </div>
 
                                 <div class="am-form-group">
-                                    <label for="user-weibo" class="am-u-sm-3 am-form-label">职位</label>
+                                    <label  class="am-u-sm-3 am-form-label">职位</label>
                                     <div class="am-u-sm-9">
                                         <select  id="positionID" >
 										  
@@ -78,9 +87,16 @@
                                 </div>
 
                                 <div class="am-form-group">
-                                    <label for="user-intro" class="am-u-sm-3 am-form-label">联系方式</label>
+                                    <label  class="am-u-sm-3 am-form-label">联系方式</label>
                                     <div class="am-u-sm-9">
                                         <input type="text" class="am-form-field"  minlength="11" placeholder="联系方式" id="phone" required />
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label  class="am-u-sm-3 am-form-label">地址</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="am-form-field"  placeholder="地址" id="address" required />
                                     </div>
                                 </div>
 
@@ -99,6 +115,7 @@
 <script src="${contextPath}/resources/js/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/amazeui.min.js"></script>
 <script src="${contextPath}/resources/js/app.js"></script>
+<script src="${contextPath}/resources/js/md5.min.js"></script>
 <script src="${contextPath}/resources/layer/layer.js"></script>
  	<script>
  	$(function(){
@@ -113,27 +130,28 @@
  			
  			var name = $('#name').val();
  			var username = $('#username').val();
- 			var sex = $('#sex').val();
- 			
+ 			var password = md5('123456');
+ 			var sex = $("input[name='sex']:checked").val();
  			var age = $('#age').val();
  			var positionID = $('#positionID').val();
  			var phone = $('#phone').val();
- 			
- 			if(name!='' && username!='' && sex!='' && age!='' && positionID!='' && phone!=''){
+ 			var address = $('#address').val();
+
+ 			if(name!='' && username!='' && sex!='' && age!='' && positionID!='' && phone!='' && address!=''){
  				$.ajax({
- 					url:'${contextPath}/admins/addAdmins',
+ 					url:'${contextPath}/admins/addAndUpdateAdmin',
  					type:'post',
  					dataType:'json',
- 					data:{'id':id,'name':name,'username':username,'sex':sex,'age':age,'positionID':positionID,'phone':phone},
+ 					data:{'id':id,'name':name,'userName':username,'passWord':password,'sex':sex,'age':age,'positionID':positionID,'phone':phone,'address':address},
 	 				success:function(res){
-	 					if(res.code=="103"){
+	 					if(res.code=="3"){
 	 						layer.alert(res.msg, {
 								  icon: 1,
 								  skin: 'layer-ext-moon',
 								  title:'提示信息',
 								  time:1000,
 								})
-	 					}else if (res.code=="104"){
+	 					}else if (res.code=="5"){
 	 						layer.alert(res.msg, {
 								  icon: 1,
 								  skin: 'layer-ext-moon',
@@ -167,22 +185,19 @@
  		},"json");
  	}
  	//初始化项目信息
- 	function getProjectInfo(){
-		$.post("${contextPath}/project/getProjectInfoById/?id=${id}","",function(res){
+ 	function getPositionInfo(){
+		$.post("${contextPath}/admins/getUserInfoByID/?userID=${userID}","",function(res){
 			console.log(res.data);
 			var data = res.data;
 			if(data){
- 			$('#id').val(data.id);
- 			$('#title').val(data.title);
-			
- 			$('#principalID').val(data.principalid);
- 			var arr = data.memberid.split(",");
- 		
- 			$('#memberID').val(arr).trigger('change');
- 			
- 			$('#startTime').datepicker('setValue',data.starttime);
- 			$('#endTime').datepicker('setValue', data.endtime);
- 			$('#description').val(data.description);
+ 			$('#id').val(data[0].userID);
+ 			$('#name').val(data[0].name);
+            $("input[name='sex']").eq(data[0].sex).attr('checked','true');
+            $('#username').val(data[0].userName);
+            $('#age').val(data[0].age);
+            $('#positionID').val(data[0].positionID);
+            $('#phone').val(data[0].phone);
+            $('#address').val(data[0].address);
 			}
 		});
  	}

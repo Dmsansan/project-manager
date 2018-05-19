@@ -1,6 +1,7 @@
 package com.sansan.controller.admins;
 
 import java.security.MessageDigest;
+import java.sql.ParameterMetaData;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,20 +11,25 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sansan.BaseController;
+import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sansan.dao.Project;
 import com.sansan.dao.User;
 import com.sansan.service.UserService;
 
+import org.springframework.web.servlet.RequestToViewNameTranslator;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.MD5;
+import sun.security.util.Password;
 
 
 /**
@@ -33,7 +39,7 @@ import sun.security.provider.MD5;
  */
 @Controller
 @RequestMapping("/admins")
-public class AdminController {
+public class AdminController extends BaseController{
 	// 日志记录
     private static final Logger log = Logger.getLogger(Project.class);
     
@@ -62,8 +68,20 @@ public class AdminController {
 	 */
 	@RequestMapping("/listData")
 	public @ResponseBody Object listData(HttpServletRequest request, Model model){
-		List<User> user = userServ.getListAdmins();
-		
+		Integer page = request.getParameter("page")==null? 1:Integer.parseInt(request.getParameter("page"));//当前页
+		Integer pageNum = request.getParameter("pageNum")==null ? 10:Integer.parseInt(request.getParameter("pageNum"));//每页数量
+		Integer start = pageNum*(page-1);
+
+		Integer end = pageNum;//获取记录条数
+
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("start",start);
+		map.put("end", end);
+
+		List<User> user = userServ.getListAdmins(map);
+
+		model.addAttribute("total",user.size());//总记录数
+		model.addAttribute("page",page);//页数
 		model.addAttribute("data", user);
 		model.addAttribute("msg", "获取用户列表数据！");
 		return model;
@@ -91,11 +109,11 @@ public class AdminController {
 	public ModelAndView addAndUpdateView(HttpServletRequest request){
 		try{
 			String contextPath = request.getContextPath();
-			String id = request.getParameter("id");
+			String userID = request.getParameter("userID");
 			
 			Map<String, Object> model = new HashMap<String,Object>();
 			model.put("contextPath", contextPath);
-			model.put("id", id);
+			model.put("userID", userID);
 			
 			return new ModelAndView("admins/addAndUpdate",model);
 		}catch(Exception e){
@@ -110,31 +128,27 @@ public class AdminController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("insertAdmin")
-	public @ResponseBody Object insertPosition(HttpServletRequest request, Model model){
+	@RequestMapping("/addAndUpdateAdmin")
+	public @ResponseBody Object addAndUpdateAdmin(HttpServletRequest request, Model model){
 		try{
-			int userID = request.getParameter("id") == null? 0:Integer.parseInt(request.getParameter("id"));//用户ID
+			int userID = ParameIsNull(request.getParameter("id"))? 0:Integer.parseInt(request.getParameter("id"));//用户ID
 			String name  = request.getParameter("name");//姓名
-			String passWord = request.getParameter("password");//密码，MD5加密密码
-			String userName = request.getParameter("username");//用户名
-			int sex = request.getParameter("sex") == null? 0:Integer.parseInt(request.getParameter("sex"));//性别
-			int age = request.getParameter("age") == null? 0:Integer.parseInt(request.getParameter("age"));//年龄
-			int positionID = request.getParameter("positionID") == null? 0:Integer.parseInt(request.getParameter("positionID"));//职位ID
+			String passWord = request.getParameter("passWord");//密码，MD5加密密码
+			String userName = request.getParameter("userName");//用户名
+			int sex = ParameIsNull(request.getParameter("sex"))? -1:Integer.parseInt(request.getParameter("sex"));//性别 0:保密 1:女性 2:男性
+			int age = ParameIsNull(request.getParameter("age"))? 0:Integer.parseInt(request.getParameter("age"));//年龄
+			int positionID = ParameIsNull(request.getParameter("positionID"))? 0:Integer.parseInt(request.getParameter("positionID"));//职位ID
 			String phone = request.getParameter("phone");//手机号码
 			String address = request.getParameter("address");//地址
-			
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-			String date = df.format(new Date());
-			
-			User user = new User();
-			
-			if(name == null||name.equals("null") || passWord==null||passWord.equals("null") || userName==null||userName.equals("null")
-					|| phone==null||phone.equals("null") || address==null||address.equals("null")
-					){
+
+
+			if(ParameIsNull(name) || ParameIsNull(passWord) || ParameIsNull(userName) || sex==-1 || age==0 || positionID==0 || ParameIsNull("phone") || ParameIsNull(address)){
 				model.addAttribute("msg", "must need other variables!");
 				model.addAttribute("code", 1);
 			}else{
-				//map.put("userID", userID);
+
+				User user = new User();
+				user.setUserID(userID);
 				user.setName(name);
 				user.setUserName(userName);
 				user.setPassWord(passWord);
@@ -143,28 +157,99 @@ public class AdminController {
 				user.setPhone(phone);
 				user.setAddress(address);
 				user.setPositionID(positionID);
-			}
-			
-			if(userID == 0){//新增用户
-				int id = userServ.insertAdmin(user);
-				if(id == 0){
-					model.addAttribute("msg", "add error!");
-					model.addAttribute("code", 2);
-				}else{
-					model.addAttribute("msg", "add success!");
-					model.addAttribute("code", 3);
+
+				if(userID == 0){//新增用户
+					User userInfo = userServ.getUserID(userName);
+					if(userInfo != null){
+						model.addAttribute("msg","user is aready exit...");
+						model.addAttribute("code",4);
+					}else{
+						int id = userServ.insertAdmin(user);//受影响记录条数
+						if(id == 0){
+							model.addAttribute("msg", "add error!");
+							model.addAttribute("code", 2);
+						}else{
+							model.addAttribute("msg", "add success!");
+							model.addAttribute("code", 3);
+						}
+					}
+				}else{//编辑用户
+					int uid = userServ.updateUserInfo(user);
+					if(uid != 0){
+						model.addAttribute("msg","update sucess...");
+						model.addAttribute("code",5);
+					}else {
+						model.addAttribute("msg","update error...");
+						model.addAttribute("code",6);
+					}
 				}
-			}else{//编辑用户
-				model.addAttribute("msg", passWord);
 			}
-			
-			
 		}catch(Exception e){
 			log.info(e);
 			model.addAttribute("code", 0);
 			model.addAttribute("msg", "service error !");
 		}
 		return model;
-}
-	
+	}
+
+	/**
+	 * 根据用户ID获取用户信息
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/getUserInfoByID")
+	public @ResponseBody Object getUserInfoByID(HttpServletRequest request,Model model){
+		try{
+			int userID = ParameIsNull(request.getParameter("userID"))? 0:Integer.parseInt(request.getParameter("userID"));
+
+			if(userID==0){
+				model.addAttribute("msg","need must variable...");
+				model.addAttribute("code","2");
+			}else{
+				List<User> user = userServ.getUserInfo(userID);
+				model.addAttribute("data",user);
+				model.addAttribute("msg","successs");
+				model.addAttribute("code",1);
+			}
+
+		}catch (Exception e){
+			log.info(e);
+			model.addAttribute("msg","service error...");
+			model.addAttribute("code",0);
+		}
+		return model;
+	}
+
+	/**
+	 * 删除用户信息
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/delAdmins")
+	public @ResponseBody Object delUserInfo(HttpServletRequest request,Model model){
+		try{
+			int userID = ParameIsNull(request.getParameter("userID"))? 0:Integer.parseInt(request.getParameter("userID"));
+
+			if(userID==0){
+				model.addAttribute("msg","neeed must variable...");
+				model.addAttribute("code",2);
+			}else {
+				int uid = userServ.delUserInfo(userID);
+				if (uid != 0) {
+					model.addAttribute("msg", "del sucesss...");
+					model.addAttribute("code", 1);
+				}else{
+					model.addAttribute("msg","del error...");
+					model.addAttribute("code",3);
+				}
+			}
+		}catch (Exception e){
+			log.info(e);
+			model.addAttribute("msg","service error....");
+			model.addAttribute("code",0);
+		}
+		return model;
+	}
 }

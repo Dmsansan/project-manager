@@ -303,7 +303,7 @@
             shade: 0.3,
             maxmin: true, //开启最大化最小化按钮
             area: ['893px', '600px'],
-            content: '${contextPath}/admins/addAndUpdateView/?id=0',
+            content: '${contextPath}/admins/addAndUpdateView/?userID=0',
             end: function () {
                 location.reload();
             }
@@ -328,16 +328,16 @@
     		type:"post",
     		dataType:"json",
     		success:function(res){
-    			//console.log(res.data);
+    			console.log(res.data);
     			var data = res.data;
     			loadData(data);
     			//分页开始
-    			var total = data[0].total;//总的记录数量
+    			var total = res.total;//总的记录数量
     			var totalPage= Math.ceil(total/pageNum);//总的页数
     			
     			var pageHtml="";
-    			var prePage=data[0].page-1;
-    			var nextPage=data[0].page+1;
+    			var prePage=res.page-1;
+    			var nextPage=res.page+1;
     			for(var j=1;j<=totalPage;j++){
     				pageHtml +='<li><a href="#"  onclick="getProjectList('+j+')">'+j+'</a></li>';
     				pageHtml = pageHtml;
@@ -404,7 +404,7 @@
     }
    
    //弹出编辑页面
-   function update(id){
+   function update(userID){
 	   layer.open({
            type: 2,
            title: '',
@@ -412,7 +412,7 @@
            shade: 0.3,
            maxmin: true, //开启最大化最小化按钮
            area: ['893px','620px'],
-           content: '${contextPath}/project/addAndUpdateView/?id='+id,
+           content: '${contextPath}/admins/addAndUpdateView/?userID='+userID,
            end: function () {
                location.reload();
            }
@@ -420,16 +420,16 @@
    }
    
    //删除项目
-   function del(id){
-	   layer.confirm('确认删除该项目？', {
+   function del(userID){
+	   layer.confirm('确认删除该用户？', {
 		   btn: ['确认','取消'] 
 		 }, function(){
-			$.post("${contextPath}/project/delProject/?id="+id,"",function(res){
-				if(res.code==100){
+			$.post("${contextPath}/admins/delAdmins/?userID="+userID,"",function(res){
+				if(res.code==1){
 					layer.msg(res.msg, {icon: 1});
-				}else{
-					layer.msg(res.msg,{icon: 2});
-				}
+				}else {
+                    layer.msg(res.msg, {icon: 2});
+                }
 			})
 		 }, function(){
 		 });

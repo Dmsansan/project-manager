@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService{
 	 * 获取用户列表信息
 	 */
 	@Override
-	public List<User> getListAdmins() {
-		return userMapper.getListAdmins();
+	public List<User> getListAdmins(Map<String,Object> map) {
+		return userMapper.getListAdmins(map);
 	}
 	
 	/**
@@ -78,6 +78,24 @@ public class UserServiceImpl implements UserService{
 	public int insertAdmin(User user) {
 		return userMapper.insertAdmin(user);
 	}
-	
-	
+
+	/**
+	 * 编辑用户信息
+	 * @param user
+	 * @return
+	 */
+	@Override
+	public int updateUserInfo(User user){
+		return userMapper.updateUserInfo(user);
+	}
+
+	/**
+	 * delUserInfo
+	 * @param userID
+	 * @return
+	 */
+	@Override
+	public int delUserInfo(int userID){
+		return userMapper.delUserInfo(userID);
+	}
 }
