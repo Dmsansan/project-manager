@@ -40,12 +40,32 @@ public interface UserMapper {
 	 * 获取用户列表信息
 	 * @return
 	 */
-	List<User> getListAdmins();
+	List<User> getListAdmins(Map<String,Object> map);
 	
 	/**
 	 * 获取用户总数量
 	 * @return
 	 */
 	int getCountAdmins();
+	
+	/**
+	 * 添加用户
+	 * @param user
+	 * @return
+	 */
+	int insertAdmin(User user);
 
+	/**
+	 * 编辑用户信息
+	 * @param user
+	 * @return
+	 */
+	int updateUserInfo(User user);
+
+	/**
+	 * delUserInfo
+	 * @param userID
+	 * @return
+	 */
+	int delUserInfo(int userID);
 }

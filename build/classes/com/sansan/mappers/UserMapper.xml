@@ -28,7 +28,7 @@
 		<result property="logStamp" jdbcType="TIMESTAMP" column="logStamp" />
 		
 		<association property="position" javaType="com.sansan.dao.Position">
-	    	<id column="positionID" jdbcType="INTEGER" property="positionID"/>
+	    	<id column="positionID" jdbcType="INTEGER" property="positionid"/>
 	    	<result  column="positionName" jdbcType="VARCHAR" property="name"/>
 	    	<result  column="numbers" jdbcType="INTEGER" property="numbers"/>
 	    </association>
@@ -123,14 +123,35 @@
 		INSERT INTO mf_user (userName,passWord,logStamp) VALUES (#{userName},#{passWord},#{logStamp})
 	</insert>
 	
+	<!-- 用户列表页面添加用户 -->
+	<insert id="insertAdmin" parameterType="com.sansan.dao.User">
+		<selectKey resultType="INTEGER" order="AFTER" keyProperty="userID">
+			SELECT LAST_INSERT_ID() AS userID
+		</selectKey>
+
+		INSERT INTO mf_user (name,userName,passWord,sex,age,phone,address,positionID,logStamp) VALUES (#{name},#{userName},#{passWord},#{sex},#{age},
+		#{phone},#{address},#{positionID},now())
+
+	</insert>
 	<!-- 获取用户列表信息 -->
 	<select id="getListAdmins" resultMap="getListAdmins">
 		SELECT 
 		<include refid="User_List" />
-		FROM mf_user a LEFT JOIN mf_position b ON a.positionID=b.positionID  ORDER BY a.userID DESC
+		FROM mf_user a LEFT JOIN mf_position b ON a.positionID=b.positionID  ORDER BY a.userID DESC LIMIT #{start},#{end}
 	</select>
 	
 	<select id="getCountAdmins" resultType="int">
 		SELECT COUNT(*) FROM mf_user
 	</select>
+
+	<!-- 编辑用户信息 -->
+	<update id="updateUserInfo" parameterType="com.sansan.dao.User">
+		UPDATE  mf_user SET name=#{name},userName=#{userName},sex=#{sex},age=#{age},phone=#{phone},positionID=#{positionID},address=#{address}
+		WHERE userID=#{userID}
+	</update>
+
+	<!-- 删除用户信息 -->
+	<delete id="delUserInfo" parameterType="java.lang.Integer">
+		DELETE FROM  mf_user WHERE  userID=#{userID}
+	</delete>
 </mapper>
