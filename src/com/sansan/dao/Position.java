@@ -1,18 +1,18 @@
 package com.sansan.dao;
 
 public class Position {
-    private Integer positionid;
+    private Integer positionID;
 
     private String name;
 
     private Integer numbers;
 
     public Integer getPositionid() {
-        return positionid;
+        return positionID;
     }
 
-    public void setPositionid(Integer positionid) {
-        this.positionid = positionid;
+    public void setPositionid(Integer positionID) {
+        this.positionID = positionID;
     }
 
     public String getName() {
