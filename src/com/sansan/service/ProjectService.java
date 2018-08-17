@@ -5,6 +5,11 @@ import java.util.Map;
 
 import com.sansan.dao.Project;
 
+/**
+ * 项目管理接口类
+ * @author Administrator
+ *
+ */
 public interface ProjectService {
 	String SERVICE_NAME = "projectService";
 	
